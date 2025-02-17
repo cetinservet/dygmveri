@@ -1,0 +1,27 @@
+# Önsöz {.unnumbered}
+
+Ekonomik ve sosyal kalkınmayı teşvik etmek amacıyla uygulanan devlet yardımları, kamu kaynaklarının etkin ve verimli kullanımını sağlamayı hedefleyen kritik politika araçlarıdır. Ancak bu yardımların gerçekten beklenen etkileri yaratıp yaratmadığını belirlemek, yalnızca sağlanan desteklerin miktarını değerlendirmekle değil, bu desteklerin ekonomi ve toplum üzerindeki somut sonuçlarını bilimsel yöntemlerle ölçmekle mümkündür. Etki değerlendirme yöntemleri, bu doğrultuda karar alıcıların bilinçli ve veri temelli politikalar geliştirmesine olanak sağlayan güçlü bir enstrüman olarak öne çıkmaktadır.
+
+Bu çalışma, devlet yardımlarının etki değerlendirme süreçlerinde kullanılan yöntemlere teorik ve uygulamalı bir temel sunmayı amaçlamaktadır. Etki değerlendirme süreçlerinin güvenilir ve tutarlı sonuçlar üretebilmesi için iki temel unsur büyük önem taşımaktadır:
+
+- Kullanılan analiz yöntemlerinin bilimsel sağlamlığı
+
+- Veri setlerinin doğruluğu, eksiksizliği ve tutarlılığı
+
+Bu bağlamda, etki değerlendirme süreci yalnızca istatistiksel analizleri içermekle kalmayıp, aynı zamanda veri manipülasyonu, veri temizleme, eksik veri yönetimi, aykırı değer analizi ve veri dönüşümleri gibi konular da süreç içinde kritik rol oynamaktadır. Eksik veya yanlış verilerle yürütülen bir analiz, politika yapıcıları yanlış yönlendirebilmekte ve kamu kaynaklarının verimsiz kullanımına neden olabilmektedir.
+
+Son yıllarda, etki değerlendirme alanındaki en önemli gelişmelerden biri, istatistiksel analizlerin programlama dilleri ve dinamik raporlama sistemleriyle entegre edilmesi olmuştur. Bu çerçevede, çalışmada R programlama dili ve Quarto platformu kullanılarak uygulamalı bir rehber oluşturulmuştur. R, sunduğu esneklik, geniş analiz olanakları ve güçlü veri işleme yetenekleriyle etki değerlendirme süreçlerinde yaygın olarak kullanılan bir araç haline gelmiştir. Çalışma, R içerisinde yer alan bir platform olan Quarto’nun kitap formatı özelliğiyle derlenmiş olup, hem okunması kolay bir kaynak hem de uygulamalı bir rehber olarak tasarlanmıştır.
+
+Bu çalışma, Başkanlığımız ve diğer kamu kurumlarında yürütülen etki değerlendirme çalışmalarına destek sağlamayı hedeflemektedir. Etki değerlendirme sürecinde veri yönetimi gibi temel zorluklara yönelik çözüm önerileri sunarak, veri temelli karar alma süreçlerine katkı sağlamayı amaçlamaktadır.
+
+Günümüzde, etki değerlendirme yalnızca uygulanan politikaların başarısını ölçmek için değil, gelecekte uygulanacak politikaların daha iyi tasarlanması için de kritik bir rol oynamaktadır. Bu çalışma ile devlet yardımlarının etkisini etkisini değerlendirmeden önce veri yönetimi ile alakalı çalışmalara katkı sunmak hedeflemektedir.
+
+
+
+
+**Strateji ve Bütçe Başkanlığı**
+
+**Devlet Yardımları Genel Müdürlüğü**
+
+\newpage
+

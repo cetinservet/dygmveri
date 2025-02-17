@@ -1,0 +1,7 @@
+# Temel İstatistik {.unnumbered}
+
+Çalışmanın *Temel İstatistik* bölümü, istatistiksel analizlerin yapı taşlarını oluşturan temel kavram ve yöntemlere odaklanmaktadır. İlk olarak, veri tipleri ele alınmış ve sayısal (nicel) verilerin sürekli ve kesikli, kategorik (nitel) verilerin ise nominal ve ordinal olarak sınıflandırılması yapılmıştır. Bu sınıflandırma, farklı veri türlerinin analiz süreçlerinde nasıl ele alınması gerektiğini açıklamaktadır. Ayrıca, merkezi eğilim ölçüleri (ortalama, medyan, mod) ve yayılım ölçüleri (aralık, varyans, standart sapma) gibi istatistiksel araçlar ayrıntılı bir şekilde incelenmiş ve bunların veri setlerini özetlemedeki rolleri vurgulanmıştır. Merkezi limit teoremi, dağılım türleri ve olasılık dağılımları (örneğin, binom, Poisson, normal dağılım) gibi istatistikte önemli kavramlara da bölümde yer verilmiş, bu kavramların temel prensipleri uygulamalı örneklerle desteklenmiştir.
+
+Bölümün devamında, istatistiksel analizlerde sıklıkla kullanılan güven aralıkları ve hipotez testleri ayrıntılı bir şekilde ele alınmaktadır. Güven aralıklarının nasıl hesaplandığı ve bu aralıkların sonuçların yorumlanmasındaki önemi açıklanmıştır. Hipotez testleri kapsamında, sıfır hipotezi ve alternatif hipotez kavramları, p-değeri ve anlamlılık seviyelerinin istatistiksel çıkarımlar üzerindeki etkisi ele alınmıştır. Ayrıca, farklı hipotez testi türleri ve bu testlerin hangi durumlarda kullanılması gerektiği açıklanmıştır.
+
+\newpage

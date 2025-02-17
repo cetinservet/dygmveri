@@ -1,0 +1,1676 @@
+# Veri Temizleme
+
+## Eksik Verilerle Çalışma
+
+Büyük veri, hacim, hız, çeşitlilik, doğruluk ve değer gibi özellikleriyle öne çıkar. Bu karmaşık veri dünyasında anlamlı bilgiler çıkarma ve analiz süreçlerini yönetme görevi veri bilimine düşmektedir. Ancak, büyük veri analizi sürecinde en sık karşılaşılan zorluklardan biri eksik verilerdir. Eksik veriler, genellikle yanıt eksiklikleri veya veri kaybı gibi nedenlerle ortaya çıkar ve bu durum, analiz sonuçlarının doğruluğunu ve güvenilirliğini tehlikeye atar. Eksik veri problemi, istatistiksel gücün azalması, parametre tahminlerinde yanlılık, örneklemlerin temsil gücünün zayıflaması ve analiz süreçlerinin karmaşıklaşması gibi sorunlara yol açabilir. Bu nedenle, eksik verilerle doğru bir şekilde başa çıkmak, sağlam ve güvenilir analiz sonuçları elde etmek için kritik öneme sahiptir.
+
+<https://www.rpubs.com/justjooz/miss_data>
+
+Eksik veri yönetimi, veri analizi sürecinin temel yapı taşlarından biri olarak değerlendirilmelidir. Bu bağlamda, eksik verilerin tespiti ve görselleştirilmesi için **naniar** paketi kullanılabilir; özellikle `vis_miss()` fonksiyonu, eksik veri desenlerini analiz etmek için etkili bir araçtır. Eksik verileri doldurma yöntemleri arasında, özellikle çok değişkenli veri setleri için uygun olan **mice** paketi dikkat çeker. Bu paket, birden fazla doldurma yöntemi sunarak, veri setinin istatistiksel gücünü ve temsiliyetini artırır. Ayrıca, eksik veri profillerini detaylı bir şekilde analiz etmek ve raporlamak için **dlookr** paketi gibi araçlardan yararlanmak mümkündür. Eksik veri yönetiminde kullanılan bu yaklaşımlar, veri analistlerinin daha doğru öngörüler yapmasını sağlayarak, stratejik karar alma süreçlerine destek olur. Böylece, eksik veri probleminin üstesinden gelmek için yöntem seçimi ve uygulaması, veri analizinde güvenilirlik ve doğruluk açısından vazgeçilmez bir süreçtir.
+
+**Veri Seti `airquality`**
+
+```{r}
+#| label: veri-goruntuleme
+#| message: false
+#| error: false
+
+# Gerekli kütüphanelerin yüklenmesi
+library(dplyr)
+# datasets paketini yükleme (otomatik olarak yüklü olmalı)
+library(datasets)
+
+# airquality veri setinin görüntülenmesi
+head(airquality, 10)
+```
+
+> **Airquality Veri Seti**
+>
+> **`airquality`** veri seti, 1973 yılında New York'ta ölçülen hava kalitesi değerlerini içeren bir veri setidir. Bu veri seti, hava kalitesini etkileyen çeşitli değişkenleri içerir ve çevresel analizler için kullanılır. Veri seti, aşağıdaki değişkenlerden oluşur:
+>
+> -   **Ozone**: Ozon seviyelerini ifade eder (ppb - parts per billion).
+> -   **Solar.R**: Solar radyasyon değerlerini içerir (langley).
+> -   **Wind**: Rüzgar hızını içerir (mph - miles per hour).
+> -   **Temp**: Günlük maksimum sıcaklık ölçümlerini içerir (Fahrenheit).
+> -   **Month**: Ölçümün yapıldığı ayı temsil eder (1-12 arasında).
+> -   **Day**: Ölçümün yapıldığı gün bilgisini içerir (1-31 arasında).
+
+### Ad-hoc Yöntemler - Liste Bazlı Silme (Listwise Deletion)
+
+Eksik verilerle başa çıkmak için veri bilimciler tarafından en sık kullanılan yöntemlerden biri, eksik değerlere sahip durumları tamamen çıkarmak ve yalnızca kalan veri setini analiz etmektir. Bu yönteme **liste bazlı silme** veya **tam durum analizi** (complete-case analysis) denir. R programında `na.omit()` fonksiyonu, veri setinde bir veya daha fazla eksik değeri olan tüm durumları kaldırır.
+
+```{r}
+#| label: veri-bakis
+#| message: false
+#| error: false
+head(airquality)
+```
+
+Veri setinde bazı **`NA`** değerlerini şimdiden gözlemleyebiliyoruz.
+
+Sonraki adımda, **`NA`** değerleri içeren durumları veri setinden kaldırıyoruz.
+
+-   **`na.omit()` ile Eksik Verileri Çıkarma**
+
+```{r}
+#| label: eksik-verileri-cikarma
+#| message: false
+#| error: false
+
+# Eksik verileri çıkarma
+airquality_omit <- na.omit(airquality)
+
+# İlk birkaç satırı görüntüleme
+head(airquality_omit)
+
+```
+
+> İlk çıktıda **`airquality`**, eksik değerler (**NA**) hala veri setinde bulunurken, **`airquality_omit`** veri setinde eksik değerler içeren satırlar tamamen çıkarılmıştır. Bu, satır sayısının azalmasına yol açar.
+
+::: {.callout-note title="Liste bazlı silme"}
+**Liste bazlı silme** (Listwise deletion) yöntemi, eksik veriler içeren satırları tamamen kaldırdığı için genellikle birkaç nedenden dolayı tercih edilmez:
+
+1.  **Veri Kaybı**: Eksik değerlere sahip satırların tamamen silinmesi, veri setinin boyutunu küçültür ve bu da analiz için kullanılabilir bilgi miktarını azaltır. Bu durum, özellikle eksik verilerin oranı yüksekse, analiz sonuçlarını ciddi şekilde etkileyebilir.
+2.  **Örnekleme Yanlılığı**: Eksik veriler rastgele (MCAR - Missing Completely at Random) değilse, bu yöntemin kullanımı örneklemde yanlılığa neden olabilir. Sonuç olarak, elde edilen analiz sonuçları tüm veri setini veya popülasyonu doğru bir şekilde temsil etmeyebilir.
+3.  **İstatistiksel Güç Kaybı**: Veri setinin boyutunun küçülmesi, istatistiksel gücü azaltır. Bu da yapılan analizlerin daha az anlamlı sonuçlar üretmesine yol açabilir.
+4.  **Karmaşık Eksiklik Yapıları**: Eksik veriler farklı desenler izleyebilir ve listwise deletion, bu desenleri dikkate almadan tüm eksik satırları kaldırır. Bu, özellikle eksik verilerin analizin anahtar değişkenlerinde olduğu durumlarda önemli bilgilerin kaybolmasına neden olabilir.
+
+Bu nedenlerle, eksik verilerle başa çıkmak için **çoklu doldurma (multiple imputation)** veya eksik değerlerin modelleme yöntemleriyle ele alınması gibi daha gelişmiş yöntemler genellikle listwise deletion'a tercih edilir.
+:::
+
+### Eksik Verilerin Grafik Olarak Tespiti
+
+-   **Eksik Verileri Görselleştirme (`naniar` Paketinin Kullanımı)**
+
+```{r}
+#| label: eksik-veri-gorsellestirme
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme (eğer yüklü değilse)
+# install.packages("naniar")
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Eksik verileri görselleştirme
+vis_miss(airquality)
+```
+
+> Grafik, **`vis_miss()`** fonksiyonu ile oluşturulmuş ve **airquality** veri setindeki eksik verilerin genel yapısını göstermektedir.
+>
+> -   **Siyah alanlar** eksik verileri (**Missing**) temsil ederken, **gri alanlar** mevcut verileri (**Present**) temsil eder.
+> -   Ozon değişkeninde %24, Solar.R değişkeninde %5 oranında eksik veri bulunmaktadır. Diğer değişkenler (Wind, Temp, Month, Day) ise eksiksizdir.
+
+#### Eksik Değerlerin Eşzamanlı Görülmesi
+
+```{r}
+#| label: eksik-veri-upset-grafigi
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Eksik verilerin UpSet grafiği ile gösterimi
+gg_miss_upset(airquality)
+```
+
+> `gg_miss_upset(airquality)` fonksiyonu, `naniar` paketine ait bir fonksiyondur ve eksik değerlerin birlikteliğini (co-occurrence) görselleştirmek için UpSetR paketini kullanarak bir grafik oluşturur. Bu grafik, hangi değişkenlerin birlikte eksik olduğunu ve bu kombinasyonların ne sıklıkta görüldüğünü gösterir.
+>
+> -   **Çubuk grafikler (dikey):** Her bir çubuk, belirli bir eksik değer kombinasyonunu temsil eder. Çubuğun yüksekliği, bu kombinasyonun veri setinde kaç kez tekrarlandığını gösterir.
+> -   **Noktalar ve çizgiler (yatay):** Her bir değişken için bir nokta bulunur. Eğer bir çubukta o değişkenle ilgili nokta doluysa (yani çizgiyle bağlıysa), o kombinasyonda o değişkende eksik değer olduğu anlamına gelir. Örneğin, sadece "`Ozone`" değişkenine bağlı bir çubuk, sadece "`Ozone`" değerinin eksik olduğu satırları temsil eder. Hem "`Ozone`" hem de "`Solar.R`" değişkenlerine bağlı bir çubuk ise, her iki değişkende de aynı anda eksik değer olan satırları temsil eder.
+
+#### Faktör Düzeyine Göre Veri Eksikliğini Görselleştirme
+
+```{r}
+#| label: eksik-veri-faktor-duzeyine-gore
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Eksik verileri faktör düzeyine göre görselleştirme
+gg_miss_fct(x = airquality, fct = Month)
+```
+
+> `gg_miss_fct(x = airquality, fct = Month)` fonksiyonu, `naniar` paketine ait bir fonksiyondur ve `airquality` veri setindeki eksik verilerin `Month` değişkenine göre dağılımını görselleştirir. `Month` burada bir faktör (kategorik değişken) olarak kabul edilir ve her bir ay (5, 6, 7, 8, 9) için ayrı bir çubuk gösterilir.
+>
+> Grafikte şunlar görülebilir:
+>
+> -   **X ekseni (Month):** Ayları temsil eder (5 = Mayıs, 6 = Haziran, ..., 9 = Eylül).
+> -   **Y ekseni (Missing Percentage):** Eksik veri yüzdesini temsil eder.
+> -   **Çubuklar:** Her bir ay için bir çubuk bulunur. Çubuğun yüksekliği, o ayda ne kadar eksik veri olduğunu (tüm değişkenler için toplamda) gösterir.
+>
+> Bu grafik, eksik verilerin aylara göre nasıl değiştiğini anlamak için çok faydalıdır. Örneğin, belirli aylarda daha fazla eksik veri olup olmadığını veya eksik verilerin aylara göre bir örüntü izleyip izlemediğini görebilirsiniz. Bu bilgi, veri toplama sürecindeki olası sorunları veya mevsimsel etkileri anlamanıza yardımcı olabilir. Örneğin, eğer belirli bir ayda ölçüm cihazlarında bir arıza olduysa, o ayda daha fazla eksik veri görülebilir.
+
+-   **Eksik Verileri Faktör Düzeyine Göre Nokta Grafiği ile Görselleştirme**
+
+```{r}
+#| label: eksik-veri-faktor-duzeyine-gore-grafik
+#| message: false
+#| error: false
+
+# Gerekli paketlerin yüklenmesi
+library(ggplot2)
+library(naniar)
+
+# Eksik veri noktalarını görselleştirme
+ggplot(airquality, aes(x = Ozone, y = Solar.R)) +
+  geom_miss_point()  # Eksik verileri noktalar olarak görselleştirir
+```
+
+#### `dlookr` Paketi ile Eksik Veriler
+
+```{r}
+#| label: eksik-veri-pareto-grafigi
+#| message: false
+#| error: false
+
+# dlookr kütüphanesini yükleme (gerekli fonksiyon için)
+# install.packages("dlookr")
+library(dlookr)
+
+# Eksik verilerin Pareto grafiği ile gösterimi
+plot_na_pareto(airquality, col = "blue")
+```
+
+> `plot_na_pareto(airquality)` fonksiyonu, `dlookr` paketine ait bir fonksiyondur ve `airquality` veri setindeki eksik değerleri bir Pareto grafiği ile görselleştirir.
+>
+> -   **X ekseni:** Değişkenleri temsil eder. Değişkenler, eksik değer sayılarına göre en çoktan en aza doğru sıralanmıştır.
+> -   **Sol Y ekseni:** Eksik değer sayısını temsil eder. Her bir değişken için bir çubuk bulunur ve çubuğun yüksekliği o değişkendeki eksik değer sayısını gösterir.
+> -   **Sağ Y ekseni:** Kümülatif eksiklik yüzdesini temsil eder. Çizgi grafiği, değişkenler eklendikçe toplam eksiklik oranının nasıl arttığını gösterir.
+>
+> Pareto grafiği, hangi değişkenlerde en çok eksik değer olduğunu ve bu değişkenlerin toplam eksikliğe ne kadar katkıda bulunduğunu hızlıca anlamak için kullanışlıdır. Genellikle, birkaç değişkenin toplam eksikliğin büyük bir kısmını oluşturduğu görülür ("80/20 kuralı" olarak da bilinir). Bu grafik, eksik verilerle başa çıkarken önceliklerin belirlenmesine yardımcı olabilir. Örneğin, en çok eksik değere sahip değişkenlere odaklanmak, genel eksiklik sorununu çözmek için daha etkili bir yaklaşım olabilir. `airquality` örneğinde `Ozone` değişkeninin diğerlerine göre çok daha fazla eksik veriye sahip olduğu kolayca görülebilir.
+
+**Eksik Verilerin Hiyerarşik Kümeleme Grafiği ile Gösterimi `dlookr`**
+
+```{r}
+#| label: eksik-veri-hclust-grafigi
+#| message: false
+#| error: false
+
+# dlookr kütüphanesini yükleme
+library(dlookr)
+
+# Eksik verilerin hiyerarşik kümeleme grafiği ile gösterimi
+plot_na_hclust(airquality, main = "Distribution of missing value")
+```
+
+> -   `plot_na_hclust(airquality, main = "Distribution of missing value")` fonksiyonu, `dlookr` paketine ait bir fonksiyondur ve `airquality` veri setindeki eksik değer örüntülerini hiyerarşik kümeleme (hierarchical clustering) kullanarak görselleştirir.
+> -   `main = "Distribution of missing value"` argümanı, grafiğe bir başlık ekler.
+>
+> Bu grafik, eksik değerlerin veri setinde rastgele mi dağıldığını yoksa belirli örüntüler izleyip izlemediğini anlamak için çok faydalıdır. Örneğin, belirli satır gruplarının benzer eksik değer örüntülerine sahip olduğunu görmek, veri toplama sürecinde veya verilerin doğasında bir sorun olduğunu gösterebilir. Bu bilgi, eksik verilerle nasıl başa çıkılacağına (örneğin, hangi doldurma yönteminin kullanılacağına) karar verirken önemli bir rol oynayabilir.
+
+**Eksik Verilerin Kesişim Grafiği ile Gösterimi `dlookr`**
+
+```{r}
+#| label: eksik-veri-kesisim-grafigi
+#| message: false
+#| error: false
+
+# dlookr kütüphanesini yükleme
+library(dlookr)
+
+# Eksik verilerin kesişim grafiği ile gösterimi
+plot_na_intersect(airquality)
+```
+
+> `plot_na_intersect(airquality)` fonksiyonu, `dlookr` paketine ait bir fonksiyondur ve `airquality` veri setindeki eksik değerlerin kesişimlerini (yani hangi değişkenlerin aynı satırlarda birlikte eksik olduğunu) görselleştirir.
+
+### Eksik Değerlerin Toplam Sayıları ve Oranları
+
+`n_miss` fonksiyonu, verilerdeki tüm `NA` (yani eksik) değerlerinin toplam sayısını döndürür.
+
+#### `NA` olan değerlerin sayısı için:
+
+```{r}
+#| label: eksik-deger-sayisi
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Eksik değer sayısını hesaplama
+n_miss(airquality)
+```
+
+> `n_miss(airquality)` fonksiyonu, `naniar` paketine ait bir fonksiyondur ve `airquality` veri setindeki toplam eksik değer (NA) sayısını hesaplar. Çıktı olarak `[1] 44` değeri döner. Bu, `airquality` veri setinde toplam **44** adet eksik değer olduğunu gösterir.
+
+#### `NA` olmayan (complete) değerlerin sayısı için:
+
+```{r}
+#| label: tamamlanmis-deger-sayisi
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Tamamlanmış değer sayısını hesaplama
+n_complete(airquality)
+```
+
+> `n_complete(airquality)` fonksiyonu, `naniar` paketine ait bir fonksiyondur ve `airquality` veri setindeki *tamamlanmış* (yani eksik olmayan) toplam değer sayısını hesaplar. Çıktı olarak `[1] 874` değeri döner. Bu, `airquality` veri setinde toplam **874** adet tamamlanmış değer olduğunu gösterir.
+
+#### `NA` olan değerlerin oranı için:
+
+```{r}
+#| label: eksik-deger-orani
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Eksik değer oranını hesaplama
+prop_miss(airquality)
+```
+
+> `prop_miss(airquality)` fonksiyonunun çıktısı olan `[1] 0.04792626`, `airquality` veri setindeki verilerin yaklaşık **%4.79**'unun eksik olduğunu gösterir. Bu oran, eksik değer sayısının toplam veri noktası sayısına bölünmesiyle bulunur.
+
+#### `NA` olmayan (complete) değerlerin oranı için:
+
+```{r}
+#| label: tamamlanmis-deger-orani
+#| message: false
+#| error: false
+
+# naniar kütüphanesini yükleme
+library(naniar)
+
+# Tamamlanmış değer oranını hesaplama
+prop_complete(airquality)
+```
+
+> `prop_complete(airquality)` fonksiyonu, `naniar` paketine ait bir fonksiyondur ve `airquality` veri setindeki *tamamlanmış* (yani eksik olmayan) değerlerin oranını hesaplar. Çıktı olarak `[1] 0.9520737` değeri döner. Bu, `airquality` veri setindeki değerlerin yaklaşık **%95.2**'sinin tamamlanmış olduğunu gösterir.
+
+#### Eksik veriler için pareto tablosu `dlookr`
+
+```{r}
+#| label: eksik-veri-pareto-tablosu
+#| message: false
+#| error: false
+
+# dlookr kütüphanesini yükleme (gerekli fonksiyon için)
+# install.packages("dlookr")
+library(dlookr)
+
+# Eksik verilerin Pareto grafiği ile gösterimi
+plot_na_pareto(airquality, 
+               only_na = TRUE, 
+               # sadece eksik değer içeren değişkenlerin gösterilmesini sağlar.
+               plot = FALSE) 
+               # grafik yerine sadece tablo çıktısının gösterilmesini sağlar.
+```
+
+### Web Raporu Oluşturma
+
+```{r}
+#| label: web-raporu-olusturma 
+#| message: false 
+#| error: false 
+#| eval: false 
+
+# dlookr kütüphanesini yükleme 
+library(dlookr)  
+
+# Web raporu oluşturma 
+# diagnose_web_report(airquality, subtitle = "airquality")
+```
+
+> `diagnose_web_report(airquality, subtitle = "airquality")` fonksiyonu, `dlookr` paketine ait bir fonksiyondur ve `airquality` veri seti için kapsamlı bir veri teşhis raporu oluşturur. Bu rapor bir HTML dosyası olarak kaydedilir ve bir web tarayıcısında görüntülenebilir.
+
+### `DLOOKR` Paketi ile Eksik Değerleri Doldurma
+
+**`dlookr` paketi ve `imputate_na()`**
+
+`dlookr` paketi, **veri teşhisi** (*data diagnosis*) ve **veri keşfi** (*data exploration*) için tasarlanmış bir R paketidir. Bu paket, veri kalitesini değerlendirmek, veri setini özetlemek, değişkenler arasındaki ilişkileri incelemek ve eksik verilerle başa çıkmak için çeşitli kullanışlı fonksiyonlar içerir. **`imputate_na()`** fonksiyonu da bu paketin eksik veri yönetimi araçlarından biridir.
+
+`imputate_na()` fonksiyonunun temel amacı, bir veri setindeki eksik değerleri (NA) çeşitli yöntemlerle doldurmaktır. Bu fonksiyon, hem sayısal (numeric) hem de kategorik (categorical) değişkenlerdeki eksik değerleri ele alabilir ve farklı doldurma yöntemleri sunar.
+
+-   **Sayısal Değişkenler için Doldurma Yöntemleri:**
+
+    -   `"mean"`: Eksik değerleri değişkenin ortalamasıyla doldurur.
+    -   `"median"`: Eksik değerleri değişkenin medyanıyla (ortanca) doldurur.
+    -   `"mode"`: Eksik değerleri değişkenin moduyla (en sık tekrar eden değer) doldurur.
+    -   `"knn"`: K-en yakın komşu algoritmasını kullanarak eksik değerleri doldurur. Bu yöntem, eksik değerin bulunduğu satıra en yakın olan K tane gözlemi bulur ve bu gözlemlerin değerlerini kullanarak eksik değeri tahmin eder. Bu yöntem için bir referans değişken belirtmek gereklidir.
+    -   `"rpart"`: Özyinelemeli Bölümleme ve Regresyon Ağaçları (Recursive Partitioning and Regression Trees) yöntemini kullanarak eksik değerleri doldurur. Bu yöntem, bir karar ağacı modeli oluşturarak eksik değerleri tahmin eder. Bu yöntem için bir referans değişken belirtmek gereklidir.
+    -   `"mice"`: Zincirleme Denklemlerle Çoklu Atama (Multivariate Imputation by Chained Equations) yöntemini kullanarak eksik değerleri doldurur. Bu yöntem, her eksik değişken için bir model oluşturur ve diğer değişkenleri kullanarak eksik değerleri tahmin eder. Bu yöntem için bir referans değişken belirtmek ve bir rastgele sayı başlangıç değeri (random seed) ayarlamak gereklidir.
+
+-   **Kategorik Değişkenler için Doldurma Yöntemleri:**
+
+    -   `"mode"`: Eksik değerleri değişkenin moduyla (en sık tekrar eden kategori) doldurur.
+    -   `"rpart"`: Özyinelemeli Bölümleme ve Regresyon Ağaçları yöntemini kullanarak eksik değerleri doldurur. Bu yöntem için bir referans değişken belirtmek gereklidir.
+    -   `"mice"`: Zincirleme Denklemlerle Çoklu Atama yöntemini kullanarak eksik değerleri doldurur. Bu yöntem için bir referans değişken belirtmek ve bir rastgele sayı başlangıç değeri (random seed) ayarlamak gereklidir.
+
+`imputate_na()` fonksiyonu, veri ön işleme adımlarında eksik verileri ele almak için kullanışlı bir araçtır. Doldurma yöntemini seçerken, verinizin yapısını ve analizin amacını göz önünde bulundurmanız önemlidir. Örneğin, ortalama ile doldurma, aykırı değerlerden etkilenebilirken, medyan ile doldurma bu etkiyi azaltır. `knn`, `rpart` ve `mice` gibi daha gelişmiş yöntemler ise, değişkenler arasındaki ilişkileri dikkate alarak daha doğru tahminler yapabilir.
+
+#### Eksik değer içeren sütunu görüntüleme
+
+```{r}
+#| label: ozone-sutunu-goruntuleme
+#| message: false
+#| error: false
+
+data("airquality")
+
+# airquality veri setinin Ozone sütununu görüntüleme
+airquality$Ozone
+```
+
+> `airquality$Ozone` kodu, `airquality` adlı veri çerçevesinin `Ozone` adlı sütununu seçer ve bu sütundaki tüm değerleri bir vektör olarak döndürür.
+>
+> Çıktıda görüldüğü gibi, `Ozone` sütunu sayısal değerler ve `NA` (Not Available - Mevcut Değil) değerleri içermektedir. `NA` değerleri, o gün için ozon ölçümünün yapılamadığını veya kaydedilmediğini gösterir.
+
+::: {.callout-tip title="Vektör Çıktılarında Köşeli Parantez"}
+Çıktının başında ve sonunda `[1]`, `[28]`, `[55]` gibi ifadeler bulunur. Bunlar, çıktının hangi indeksinden itibaren yeni bir satıra geçildiğini gösterir. Örneğin, `[28]` ifadesi, o satırda 28. elemandan itibaren değerlerin listelendiğini belirtir. Bu, çıktının daha okunabilir olmasını sağlar, özellikle de çok uzun vektörler görüntülendiğinde.
+:::
+
+#### Eksik değerleri ortalama (`mean`) ile doldurma
+
+```{r}
+#| label: imputed-ozone-verisi
+#| message: false
+#| error: false
+
+# dlookr kütüphanesini yükleme 
+library(dlookr)
+
+# Ozone değişkenini Temp i referans alarak ortalama ile doldurma
+aq_imp_ozone_mean <- imputate_na(airquality, Ozone, Temp, method = "mean")
+
+# SADECE Ozone sütununu görüntüleme
+aq_imp_ozone_mean
+
+```
+
+> -   `data`: İşlem yapılacak veri seti. Burada `airquality` veri seti kullanılmıştır.
+> -   `target`: Eksik değerlerin doldurulacağı sütun. Burada `Ozone` sütunu belirtilmiştir.
+> -   `ref`: Referans alınacak sütun. Burada `Temp` sütunu kullanılmıştır.
+> -   `method`: Doldurma yöntemi. `"mean"` ile ortalama kullanılarak doldurma yapılır.
+>
+> **Çalışma Prensibi:** Eksik değerler `Temp` sütununun ortalamasına göre doldurulmuş ve yeni bir veri seti (`aq_imp_ozone`) oluşturulmuştur.
+
+#### Ortalama (`mean`) ile doldurma öncesi ve sonrası yoğunluk dağılımları
+
+```{r}
+#| label: imputed-ozone-plot
+#| message: false
+#| error: false
+
+plot(aq_imp_ozone_mean)
+```
+
+> Eksik değerlerin ortalama ile doldurulması, veri setinin genel dağılımında hafif değişikliklere yol açmıştır. Eksik değerlerin doldurulması, yoğunluk eğrisini daha düzgün hale getirmiştir, ancak bu işlem, verilerin doğal dağılımını biraz değiştirebilir. Özellikle veri çok eksikse, ortalama ile doldurma yöntemi dağılımın şeklini etkileyebilir. Eğer veri setinin doğal varyasyonunu korumak çok önemliyse, alternatif doldurma yöntemleri (örneğin, `knn` veya regresyon tabanlı yöntemler) düşünülebilir.
+
+#### Medyan (`median`) ile doldurma öncesi ve sonrası yoğunluk dağılımları
+
+```{r}
+#| label: imputed-ozone-median-plot
+#| message: false
+#| error: false
+
+library(dlookr)
+
+# Ozone ve Temp değişkenlerini medyan ile doldurma
+aq_imp_ozone_median <- imputate_na(airquality, Ozone, Temp, method = "median")
+
+# plot() fonksiyonu ile çizim (indekse karşı değer grafiği)
+plot(aq_imp_ozone_median)
+
+
+```
+
+> Grafikte, x ekseni vektördeki elemanların sırasını (indeks), y ekseni ise medyan ile doldurulmuş `Ozone` değerlerini gösterir. Ortalama ile doldurmaya benzer şekilde, grafikte noktaların rastgele yukarı aşağı hareket ettiğini görürsünüz. Ancak, medyan ile doldurmada, ortalama ile doldurmaya kıyasla grafikte daha az yatay çizgi veya düz bölge görürsünüz. Bunun nedeni, medyanın ortalamadan farklı değerlere sahip olabilmesi ve aynı değerin daha az tekrar etmesidir.
+
+::: {.callout-tip title="Ortalama vs. Medyan ile Eksik Değer Doldurma"}
+Ortalama ile doldurma, dağılımın ortasında bir yığılmaya neden olurken, medyan ile doldurma bu yığılmayı daha az belirgin hale getirir. Çünkü medyan, aykırı değerlerden ortalamaya göre daha az etkilenir. Bu nedenle, verilerinizde aykırı değerler varsa, medyan ile doldurma ortalama ile doldurmaya göre daha iyi bir seçenek olabilir.
+:::
+
+#### `knn` ile doldurma öncesi ve sonrası yoğunluk dağılımları
+
+```{r}
+#| label: imputed-ozone-knn-plot
+#| message: false
+#| error: false
+
+library(dlookr)
+
+# Ozone değişkenini knn ile doldurma (Temp'i referans değişken olarak kullanır)
+aq_imp_ozone_knn <- imputate_na(airquality, Ozone, Temp, method = "knn")
+
+# plot() fonksiyonu ile çizim (indekse karşı değer grafiği)
+plot(aq_imp_ozone_knn)
+```
+
+> Yukarıdaki kod, `Ozone` değişkenindeki eksik değerleri ***knn*** **(k-Nearest Neighbors - k-En Yakın Komşu)** yöntemiyle dolduruyor ve ardından bu doldurulmuş değerleri `plot()` fonksiyonu ile çiziliyor.
+>
+> -   **Referans Değişkenin Önemi:** knn ile doldurma yaparken, seçilen referans değişkenin (burada `Temp`) eksik değerlere sahip olmaması veya çok az eksik değere sahip olması önemlidir. Aksi takdirde, modelin doğruluğu düşebilir.
+> -   **Benzer Gözlemler:** knn, eksik değere sahip olan gözleme en benzer k tane gözlemi bulur ve bu gözlemlerin değerlerini kullanarak eksik değeri tahmin eder. Bu nedenle, verideki yerel örüntüleri yakalamada etkilidir.
+> -   **k Değeri:** k parametresi (komşu sayısı) önemlidir. Çok küçük bir k değeri, aşırı uyuma (overfitting) neden olabilirken, çok büyük bir k değeri, yerel örüntüleri kaçırmaya neden olabilir. `imputate_na()` fonksiyonunda k değeri varsayılan olarak 5'tir, ancak gerekirse değiştirilebilir.
+> -   **Dağılımın Değişimi:** knn ile doldurma, ortalama veya medyan ile doldurmaya göre dağılımı daha az etkiler. Çünkü bu yöntem, eksik değerleri tek bir sabit değerle doldurmak yerine, benzer gözlemlerin değerlerine göre farklı değerlerle doldurur.
+
+#### `rpart` ile doldurma öncesi ve sonrası yoğunluk dağılımları
+
+```{r}
+#| label: imputed-ozone-rpart-plot
+#| message: false
+#| error: false
+
+library(dlookr)
+
+# Ozone değişkenini rpart ile doldurma (Temp'i referans değişken olarak kullanır)
+aq_imp_ozone_rpart <- imputate_na(airquality, Ozone, Temp, method = "rpart")
+
+# plot() fonksiyonu ile çizim (indekse karşı değer grafiği)
+plot(aq_imp_ozone_rpart)
+
+```
+
+> Yukarıdaki kod ile `Ozone` değişkenindeki eksik değerleri ***rpart*** **(Recursive Partitioning and Regression Trees - Özyinelemeli Bölümleme ve Regresyon Ağaçları)** yöntemiyle dolduruyor ve ardından bu doldurulmuş değerleri `plot()` fonksiyonu ile çiziyor.
+>
+> -   **referans Değişkenin Önemi:** rpart ile doldurma yaparken, seçilen referans değişkenin (burada `Temp`) eksik değerlere sahip olmaması veya çok az eksik değere sahip olması önemlidir. Aksi takdirde, modelin doğruluğu düşebilir.
+> -   **Doğrusal Olmayan İlişkiler:** rpart, değişkenler arasındaki doğrusal olmayan ilişkileri de yakalayabildiği için, ortalama veya medyan ile doldurmaya göre daha doğru sonuçlar verebilir. Ancak, aşırı uyum (overfitting) riskini de beraberinde getirebilir.
+> -   **Dağılımın Değişimi:** rpart ile doldurma, ortalama veya medyan ile doldurmaya göre dağılımı daha az etkiler. Çünkü bu yöntem, eksik değerleri tek bir sabit değerle doldurmak yerine, referans değişkene göre farklı değerlerle doldurur.
+
+#### `mice` ile doldurma öncesi ve sonrası yoğunluk dağılımları
+
+```{r}
+#| label: imputed-ozone-mice-plot
+#| message: false
+#| error: false
+
+library(dlookr)
+library(mice)
+
+# Ozone değişkenini mice ile doldurma (Temp'i ve diğer değişkenleri kullanır)
+aq_imp_ozone_mice <- imputate_na(airquality, Ozone, Temp, 
+                                 method = "mice", 
+                                 seed = 111, 
+                                 print =FALSE)
+
+# plot() fonksiyonu ile çizim (indekse karşı değer grafiği)
+plot(aq_imp_ozone_mice)
+
+```
+
+> Yukarıdaki kod ile `Ozone` değişkenindeki eksik değerleri *mice* (Multivariate Imputation by Chained Equations - Zincirleme Denklemlerle Çoklu Atama) yöntemiyle dolduruyor ve ardından bu doldurulmuş değerleri `plot()` fonksiyonu ile çiziyor.
+>
+> -   **Çoklu Atama:** `mice`, eksik değerler için birden fazla olası değer ürettiği için, eksik verilerin belirsizliğini daha iyi yansıtır. Bu, daha doğru ve güvenilir sonuçlar elde etmenizi sağlar.
+> -   **Değişkenler Arası İlişkiler:** `mice`, değişkenler arasındaki ilişkileri dikkate aldığı için, diğer yöntemlere göre daha iyi tahminler yapabilir.
+> -   **Dağılımın Korunması:** `mice`, verinin orijinal dağılımını daha iyi korur. Ortalama veya medyan ile doldurma, dağılımda bozulmalara neden olabilirken, `mice` bu etkiyi en aza indirir.
+
+#### Doldurulmuş veriyi orijinal veriye entegre etme - Aşama 1
+
+```{r}
+#| label: imputed-veriyi-orijinal-veriye-entegre-etme-asama-1
+#| message: false
+#| error: false
+
+# Gerekli kütüphanelerin yüklenmesi
+library(dlookr)
+library(tidyverse)
+library(mice)
+
+# Orijinal veri setini kopyalama
+airquality_imp <- airquality
+
+# Doldurulmuş Ozone verisini orijinal veri setine atama
+airquality_imp$Ozone <- aq_imp_ozone_mice
+
+# Doldurulmuş veri setini görüntüleme
+head(airquality_imp, 10)
+```
+
+#### Doldurulmuş veriyi orijinal veriye entegre etme - Aşama 2
+
+```{r}
+#| label: imputed-veriyi-orijinal-veriye-entegre-etme-asama-2
+#| message: false
+#| error: false
+
+# Gerekli kütüphanelerin yüklenmesi
+library(dlookr)
+library(mice)
+library(tidyverse)
+
+# Ozone değişkenini ortalama ile doldurma
+aq_imp_solar_mice <- imputate_na(airquality_imp, Solar.R, Temp, 
+                                 method = "mice", 
+                                 seed = 111,
+                                 print = FALSE)
+# "print =" argümanı eğer TRUE olarak ayarlanırsa, mice işlemin geçmişini konsolda
+# yazdıracaktır. Sessiz bir hesaplama için print=FALSE kullanın.
+
+# Doldurulmuş Ozone verisini orijinal veri setine atama
+airquality_imp$Solar.R <- aq_imp_solar_mice
+
+# Doldurulmuş veri setini görüntüleme
+head(airquality_imp, 10)
+```
+
+**Orijinal veri seti ile karşılaştırma**
+
+```{r}
+head(airquality, 10)
+```
+
+### `MICE` Paketi ile Eksik Değerleri Doldurma
+
+MICE paketi, eksik veri problemini çözmek için kullanılan bir araçtır ve eksik verileri çoklu imputasyon yöntemini kullanarak işleme alır. Süreç, eksik veri içeren bir veri setiyle başlar. Bu veri genellikle bir data frame formatındadır ve eksik verilerin, diğer değişkenlerle olan ilişkilerine dayanarak doldurulması hedeflenir.
+
+MICE paketi, eksik veri problemini çözmek için şu adımları takip eder:
+
+1.  **Eksik verileri birden fazla doldurur (`mice()`).**
+
+    İlk adımda, `mice()` fonksiyonu kullanılarak eksik veriler birden fazla iterasyonla doldurulur. Her iterasyonda eksik olan değişkenler, diğer değişkenlerle olan ilişkileri kullanılarak tahmin edilir. Bu işlem sonucunda, doldurulmuş veri setlerini içeren bir "mids" nesnesi oluşturulur.
+
+2.  **Doldurulan veri setleri üzerinde analizler yapar (`with()`).**
+
+    Daha sonra, `with()` fonksiyonu aracılığıyla doldurulan veri setleri üzerinde istatistiksel analizler gerçekleştirilir. Örneğin, her doldurulmuş veri seti için regresyon analizi gibi istatistiksel işlemler yapılabilir ve bu analizlerin sonuçları "mira" nesnesi olarak saklanır.
+
+3.  **Analiz sonuçlarını havuzlar ve birleştirir (`pool()`).**
+
+    Son aşamada, `pool()` fonksiyonu kullanılarak her bir doldurulmuş veri seti üzerinde yapılan analizlerin sonuçları birleştirilir. Bu birleştirme işlemi, eksik veri kaynaklı belirsizliği hesaba katarak daha güvenilir ve tutarlı sonuçlar elde etmeyi sağlar. Bu süreç sonucunda, analizlerin nihai sonuçları "mipo" nesnesi olarak elde edilir.
+
+MICE paketi, eksik veri problemini istatistiksel olarak en iyi şekilde ele alarak analizlerin güvenilirliğini artırmayı hedefler ve eksik veriden kaynaklanan yanlılığı azaltır.
+
+[![](images/mice.png)](https://www.jstatsoft.org/article/view/v045i03)
+
+Figür: <https://www.jstatsoft.org/article/view/v045i03>
+
+**Veri Seti `nhanes`**
+
+```{r}
+#| label: nhanes-veri-goruntuleme
+#| message: false
+#| error: false
+
+# Gerekli kütüphanelerin yüklenmesi
+# install.packages("mice")
+# install.packages("tidyverse")
+# install.packages("NHANES")
+
+library(mice)
+library(tidyverse)
+library(NHANES)
+
+nhanes3 <- NHANES %>% 
+   select(Weight, Height, TotChol, PhysActive)
+
+# NHANES veri setinin görüntülenmesi (örnek olarak ilk 10 satır)
+head(nhanes3, 10)
+```
+
+> **`nhanes` Veri Seti**
+>
+> NHANES (Ulusal Sağlık ve Beslenme İnceleme Anketi), ABD'de yetişkinlerin ve çocukların sağlık ve beslenme durumunu ölçen bir CDC araştırmasıdır. Anketler ve fiziksel muayeneler içerir. 76 farklı değişkeni bulunmaktadır. Araştırmamızda özellikle aşağıda yer alan
+>
+> Çalışmamızda aşağıda yer alan değişkenlere odaklanılacaktır:
+>
+> -   **Weight (Kilo):** Obezite ve aşırı kiloyu değerlendirmek için ölçülür.
+> -   **Height (Boy):** VKİ (Vücut Kitle İndeksi) hesaplamak için kullanılır.
+> -   **TotChol (Toplam Kolesterol):** Kalp hastalığı riskini gösterir.
+> -   **PhysActive (Fiziksel Aktivite):** Genel sağlık için önemlidir.
+>
+> Bu veriler, halk sağlığı sorunlarını anlamak ve sağlık politikalarını değerlendirmek için kullanılır.
+
+**`nhanes` Veri Setinde Eksik Değerler Özet Tablosu**
+
+```{r}
+#| label: nhanes3-miss-var-summary
+#| message: false
+#| error: false
+
+library(naniar)
+
+# miss_var_summary() fonksiyonunu uygulama
+miss_var_summary(nhanes3)
+```
+
+> -   **`PhysActive 167 16.7`:** `PhysActive` değişkeninde 167 eksik veri vardır ve bu, toplam verinin %16.7'sine karşılık gelir.
+> -   **`TotChol 152 15.3`:** `TotChol` değişkeninde 152 eksik veri vardır ve bu, toplam verinin %15.3'üne karşılık gelir.
+> -   **`Height 35 3.53`:** `Height` değişkeninde 35 eksik veri vardır ve bu, toplam verinin %3.53'üne karşılık gelir.
+> -   **`Weight 7 0.78`:** `Weight` değişkeninde 7 eksik veri vardır ve bu, toplam verinin %0.78'ine karşılık gelir.
+
+#### MICE (Çoklu İmputasyon) ile Eksik Veri Doldurma
+
+```{r}
+#| label: mice-multi-imputation
+#| message: false
+#| error: false
+
+library(mice)
+
+# nhanes veri setinde eksik değerleri doldurma (20 imputasyon seti oluşturma)
+nhanes_multiimp <- mice(nhanes3, m = 20, print = FALSE)
+```
+
+> Bu kod, `mice` paketi kullanılarak **nhanes** veri setindeki eksik değerlerin doldurulması için çoklu imputasyon işlemi gerçekleştirir. Burada, `m = 20` parametresiyle eksik değerlerin 20 farklı tahmini yapılır ve her biri bir imputasyon veri seti olarak oluşturulur.
+>
+> -   `nhanes`: İçerisinde eksik değerler bulunan örnek bir veri seti.
+> -   `m = 20`: Çoklu imputasyon işlemiyle 20 farklı doldurulmuş veri seti oluşturulacağını belirtir.
+>
+> Yukarıdaki kod, `mice` paketini kullanarak `nhanes` veri setindeki eksik değerleri çoklu atama yöntemiyle doldurur. Bu yöntem, eksik verilerin belirsizliğini hesaba katarak daha doğru ve güvenilir analizler yapmanıza olanak tanır. Kodun doğru çalışması için `data(nhanes)` satırının eklenmesi önemlidir. Ayrıca, `seed` eklenmesi, sonuçların tekrarlanabilirliğini sağlar. Kod, `nhanes_multiimp` adında bir `mids` nesnesi oluşturur.
+
+::: {.callout-note title="Çoklu Atama ve mice'ın Avantajları"}
+-   **Çoklu Atama:** `mice`, eksik değerler için tek bir değer yerine birden fazla olası değer ürettiği için, eksik verilerin belirsizliğini daha iyi yansıtır. Bu, standart tek atama yöntemlerine (ortalama, medyan vb.) göre daha doğru ve güvenilir sonuçlar elde etmenizi sağlar. Tek bir değer atamak yerine, olası değerlerin bir dağılımını kullanarak, eksik veriden kaynaklanan belirsizliği modelinize dahil edersiniz.
+-   **Değişkenler Arası İlişkiler:** `mice`, atama işlemi sırasında değişkenler arasındaki ilişkileri dikkate alır. Bu, eksik verilerin daha gerçekçi ve tutarlı bir şekilde tahmin edilmesini sağlar. Örneğin, yaş ve VKİ arasındaki ilişkiyi göz önünde bulundurarak, eksik VKİ değerlerini daha doğru bir şekilde tahmin edebilir.
+-   **Dağılımın Korunması:** `mice`, verinin orijinal dağılımını daha iyi korur. Ortalama veya medyan ile doldurma gibi basit yöntemler, veri dağılımında bozulmalara neden olabilirken, `mice` bu etkiyi en aza indirir. Bu, analizlerinizin daha güvenilir ve anlamlı olmasını sağlar.
+:::
+
+#### MICE ile Veri Setleri Üzerinde Lineer Regresyon Modeli Kurma
+
+```{r}
+#| label: nhanes-multiimp-lm
+#| message: false
+#| error: false
+
+library(mice)
+
+# Her bir atanmış veri setine lineer regresyon modeli uygula
+lm_multiimp <- with(nhanes_multiimp, lm(Weight ~ Height + TotChol + PhysActive))
+```
+
+> Bu kod, daha önce oluşturulan `nhanes_multiimp` adlı `mids` (multiple imputation data set) nesnesini kullanarak, her bir tamamlanmış veri setine bir lineer regresyon modeli uygular.
+>
+> -   **`with(nhanes_multiimp, ...)`:** Bu fonksiyon, `nhanes_multiimp` nesnesindeki *her bir* tamamlanmış veri seti üzerinde belirtilen ifadeyi uygular. Yani, 20 farklı tamamlanmış veri setin varsa, bu ifade 20 kez çalıştırılır ve her biri için ayrı bir lineer regresyon modeli oluşturulur.
+>
+> -   **`lm(Weight ~ Height + TotChol + PhysActive)`:** Bu, lineer regresyon modelini tanımlar. `Weight` (Kilo) bağımlı değişken, `Height` (Boy), `TotChol` (Toplam Kolesterol) ve `PhysActive` (Fiziksel Aktivite) ise bağımsız değişkenlerdir. Yani, kilonun boy, toplam kolesterol ve fiziksel aktivite ile nasıl ilişkili olduğunu inceliyoruz.
+
+::: {.callout-note title="Faktör Dönüşümü"}
+**PhysActive'in Faktöre Dönüştürülmesi**: Eğer PhysActive değişkeni sayısal olarak kodlanmış bir kategorik değişken ise (örneğin, 1=Aktif, 2=Pasif ya da yes, no gibi), lineer regresyon modelinde doğru şekilde yorumlanabilmesi için bu değişkeni `factor()` fonksiyonu ile faktöre dönüştürmek çok önemlidir. Kodu bu duruma göre güncelledim. Eğer `PhysActive` zaten bir faktör ise bu satıra gerek yoktur.
+:::
+
+#### MICE ile Regresyon Sonuçlarını Havuzlama
+
+```{r}
+#| label: pool-regression-results
+#| message: false
+#| error: false
+
+library(mice)
+
+# Çoklu imputasyon veri setleri üzerindeki regresyon sonuçlarını havuzlama
+lm_pooled <- pool(lm_multiimp)
+
+# Havuzlanmış sonuçları özetleme
+summary(lm_pooled)
+```
+
+> Bu kod, `lm_multiimp` nesnesindeki çoklu imputasyon veri setleri üzerinde oluşturulan lineer regresyon modellerinin sonuçlarını birleştirir (pool). Havuzlama işlemi, eksik veriler nedeniyle ortaya çıkan belirsizliği hesaba katar ve tüm imputasyon veri setlerinden elde edilen sonuçları birleştirerek daha doğru ve güvenilir tahminler sunar.
+>
+> Bu model, bağımlı değişken olan **Weight (Ağırlık)** üzerinde **Height (Boy Uzunluğu)**, **TotChol (Toplam Kolesterol)** ve **PhysActive (Fiziksel Aktivite Durumu)** değişkenlerinin etkilerini anlamlı bir şekilde açıklamaktadır. **Tüm değişkenlerin p-değerleri oldukça küçüktür ve bu değişkenlerin modelde anlamlı bir etkisi olduğunu göstermektedir.** Modeldeki katsayılar, bağımlı değişken üzerinde her bir bağımsız değişkenin etkisini istatistiksel olarak güçlü bir şekilde temsil etmektedir.
+
+#### MICE ile Tamamlanmış Veri Seti
+
+```{r}
+#| label: complete-imputed-data
+#| message: false
+#| error: false
+
+library(mice)
+
+# İlk doldurulmuş veri setini elde etme
+nhanes3_completed <- complete(nhanes_multiimp)
+
+# Doldurulmuş veri setini görüntüleme
+head(nhanes3_completed, 10)
+```
+
+```{r}
+head(nhanes3, 10)
+```
+
+#### Ham Veri ile Son Veriyi Karşılaştırma
+
+```{r}
+#| label: nhanes3-missing-data-completed
+#| message: false
+#| error: false
+
+summary(nhanes3_completed)
+```
+
+```{r}
+summary(nhanes3)
+```
+
+## Aykırı Değerler ile Çalışma
+
+### Aykırı Değerleri Tanımlama ve İlk İnceleme
+
+Aykırı değerler, veri analizinde istatistiksel çıkarımları bozabilecek uç değerlerdir. Bu değerleri tanımlamak ve analiz etmek için keşifçi veri analizi (EDA) kullanılmalıdır. Aşağıda, bir veri seti üzerinden aykırı değerleri tespit etmek için uygulanabilecek yöntemler sunulmuştur.
+
+**Örnek Veri Seti**
+
+Örnek olarak bir müşteri gelir veri seti oluşturalım:
+
+```{r}
+#| label: outlier_veri_seti1
+#| message: false
+#| warning: false
+#| error: false
+
+set.seed(123)
+veri <- data.frame(
+  musteri_id = 1:150,  # 150 müşteri için ID oluşturulur
+  gelir = c(rnorm(140, mean = 5000, sd = 1000),  
+            # 140 müşteri için ortalama 5000 TL gelir
+            rnorm(10, mean = 15000, sd = 2000)) 
+            # 10 müşteri için ortalama 15000 TL gelir (Aykırı değerler)
+)
+```
+
+Bu veri setinde 140 müşterinin geliri ortalama 5000 TL civarındayken, 10 müşterinin geliri 15000 TL ve üzerinde olarak ayarlanmıştır. Böylece, yüksek gelire sahip müşteriler aykırı değerler olarak tespit edilmelidir.
+
+#### Boxplot ile Aykırı Değerleri Görselleştirme
+
+Boxplot, aykırı değerleri hızlı bir şekilde görselleştirmek için kullanılır.
+
+```{r}
+#| label: boxplot-gelir
+#| message: false
+#| warning: false
+#| error: false
+
+# ggplot2 kütüphanesini yükleme
+library(ggplot2)
+
+# Boxplot oluşturma
+ggplot(veri, aes(y = gelir)) +  # 'veri' veri setinden 'gelir' değişkenini 
+                                #y eksenine yerleştir
+  geom_boxplot(fill = "lightblue") +  # Boxplot çiz ve kutuyu açık mavi renk 
+  ggtitle("Musteri Gelirleri icin Boxplot") +  # Grafiğe başlık ekle
+  ylab("Gelir")  # Y ekseninin adını "Gelir" olarak belirle
+
+```
+
+Boxplot’ta kutu dışındaki noktalar aykırı değerleri temsil eder. Üst ve alt sınırların dışında kalan noktalar potansiyel aykırı değerlerdir.
+
+#### Histogram ile Dağılım Analizi
+
+Histogram, veri setinin genel dağılımını incelemek için kullanılır. Aykırı değerler, histogramda ana dağılımın dışında kalan uç noktalarda yoğunlaşacaktır.
+
+```{r}
+#| label: histogram-gelir
+#| message: false
+#| warning: false
+#| error: false
+
+# Histogram oluşturma
+ggplot(veri, aes(x = gelir)) +  
+  # 'veri' veri setinden 'gelir' değişkenini x eksenine yerleştir
+  geom_histogram(binwidth = 500, fill = "lightblue", color = "black") +  
+  # Bin genişliği 500 olan histogram oluştur
+  ggtitle("Gelir Dagilimi") +  # Grafiğe başlık ekle
+  xlab("Gelir") +  # X ekseninin adını "Gelir" olarak belirle
+  ylab("Frekans")  # Y ekseninin adını "Frekans" olarak belirle
+
+```
+
+Histogram, verinin çarpıklığını (skewness) gösterir. Eğer sağa veya sola çarpık bir dağılım varsa, bu genellikle aykırı değerlerin etkisiyle ortaya çıkar.
+
+#### Özet İstatistiklerle İlk Değerlendirme
+
+Aykırı değerleri tespit etmek için özet istatistiklerden de faydalanabiliriz:
+
+```{r}
+#| label: summary-gelir
+#| message: false
+#| warning: false
+#| error: false
+
+# Gelir değişkeninin özet istatistiklerini hesaplama
+summary(veri$gelir)
+
+```
+
+> Bu çıktı, **minimum, maksimum, medyan ve çeyrek değerleri** içerir. Eğer **maksimum değer, üst çeyrek (Q3) değerinden çok daha büyükse**, aykırı değerlerin varlığına işaret edebilir.
+>
+> **Sonuç Yerine**
+>
+> -   **Boxplot**, aykırı değerleri görselleştirmenin en hızlı yollarından biridir.
+> -   **Histogram**, veri setinin genel dağılımını göstererek aşırı uç değerleri tespit etmeye yardımcı olur.
+> -   **Özet istatistikler**, minimum ve maksimum değerleri analiz ederek aykırı değerleri sayısal olarak belirlemeye yardımcı olur.
+
+Bu temel yöntemlerle aykırı değerleri belirledikten sonra, IQR, Z-Skoru veya Mahalanobis mesafesi gibi istatistiksel yöntemlerle daha detaylı bir analiz yapılabilir.
+
+### Tek Değişkenli Aykırı Değer Analizi
+
+Tek değişkenli aykırı değer analizi, yalnızca **tek bir değişkenin dağılımına bakarak** uç değerlerin belirlenmesini sağlar. Aşağıda, farklı yöntemlerle aykırı değerleri tespit etmek için uygulanabilecek teknikler açıklanmaktadır.
+
+Örnek Veri Seti Daha önce kullanılan müşteri gelir veri setini kullanmaya devam ediyoruz:
+
+Bu veri setinde yüksek gelirli müşteriler aykırı değer olarak incelenecektir.
+
+### Aykırı Değer Tespiti ve Veri Setinden Çıkarılması (Tek Değişkenli)
+
+#### Z-Skoru Yöntemi
+
+Z-Skoru yöntemi, veri analistleri ve istatistikçiler tarafından özellikle normal dağılıma sahip veri setlerinde aykırı değerleri belirlemek için yaygın olarak kullanılır. Bir gözlemin ortalamadan kaç standart sapma uzaklıkta olduğunu hesaplayarak, ±3 standart sapma dışındaki değerleri aykırı kabul eder. Finans, kalite kontrol ve biyomedikal araştırmalar gibi alanlarda sıkça uygulanır. Ancak, normal dağılım varsayımına dayandığı için çarpık dağılımlarda yanıltıcı sonuçlar verebilir ve uç değerler standart sapmayı artırarak yöntemin duyarlılığını düşürebilir. Buna rağmen, özellikle simetrik dağılımlı veri setlerinde hızlı ve etkili bir aykırı değer tespit yöntemi olarak kullanılmaktadır.
+
+Z-skoru yöntemi, bir gözlemin ortalamadan kaç standart sapma uzaklıkta olduğunu belirler. Eğer bir gözlem ±3 standart sapmadan daha uzaktaysa, bu gözlem aykırı değer olarak kabul edilir.
+
+**Z-Skoru Yönteminin Temeli** Z-Skoru yöntemi, bir veri noktasının ortalamadan kaç standart sapma uzaklıkta olduğunu hesaplar.
+
+Standart normal dağılımda (%99.7 kuralı - 3 sigma kuralı):
+
+-   Verilerin %68'i ortalama ±1 standart sapma içinde bulunur.
+-   Verilerin %95'i ortalama ±2 standart sapma içinde bulunur.
+-   Verilerin %99.7'si ortalama ±3 standart sapma içinde bulunur.
+-   Bu yüzden, Z-Skoru ±3’ü aşan gözlemler aykırı kabul edilir.
+
+```{r}
+#| label: z-score-outlier-detection
+#| message: false
+#| warning: false
+#| error: false
+
+# Gelir değişkeni için Z-Skoru yöntemi kullanılarak aykırı değerlerin tespiti
+
+# 1. 'scale()' fonksiyonu ile gelir değişkeninin standartlaştırılması
+# (Z-Skoru hesaplama)
+z_scores <- scale(veri$gelir)
+
+# 2. Z-Skoru mutlak değeri 3'ten büyük olan gözlemlerin aykırı değer olarak 
+# belirlenmesi
+outliers_z <- veri$gelir[abs(z_scores) > 3]
+
+# 3. Aykırı değerlerin çıktısını görüntüleme
+outliers_z
+```
+
+> **Neden Sadece 5 Aykırı Değer Belirlendi?**
+>
+> Z-Skoru yöntemi verinin normal dağıldığını varsayar.
+>
+> **Eğer veri seti normal dağılıma yakınsa**, standart sapma istatistiği doğru şekilde çalışır ve aykırı değerleri doğru tespit edebilir. Ancak veri seti çarpık (skewed) bir dağılıma sahipse, standart sapma aşırı büyük veya küçük olabilir ve Z-Skoru bazı uç noktaları tespit edemeyebilir. Standart sapmanın büyüklüğü aykırı değer tespitini etkileyebilir.
+>
+> **Veri setinde büyük uç değerler varsa**, standart sapma artar (çünkü standart sapma, aşırı uç değerlerden etkilenir). Standart sapma büyüdüğünde, ortalama **+3σ** eşiği de yükselir, dolayısıyla bazı yüksek değerler 3 standart sapma sınırını aşamayabilir. Bu durumda, normalde aykırı olması beklenen bazı yüksek gelirler, büyük bir standart sapma nedeniyle Z-Skoru yöntemi tarafından aykırı olarak kabul edilmeyebilir. Z-Skoru yöntemi simetrik dağılımlar için uygundur.
+>
+> **Eğer veri sağa çarpık (right-skewed) dağılım gösteriyorsa** (yani büyük değerler normalden daha fazla bulunuyorsa), Z-Skoru yöntemi düşük hassasiyet gösterebilir. Çünkü Z-Skoru yöntemi, ortalamaya ve standart sapmaya bağımlıdır ve bu tür çarpık dağılımlarda ortalama üst tarafa kayar. Sonuç: Üst sınır daha yukarı kaydığı için bazı yüksek değerler aykırı olarak algılanmaz. Veri setinde doğal olarak geniş bir dağılım olabilir.
+>
+> Örneğin, müşteri gelirleri genellikle çarpık bir dağılıma sahiptir ve bazı müşterilerin diğerlerine göre çok daha yüksek geliri olabilir. Eğer dağılım doğal olarak genişse, Z-Skoru yöntemi bu genişliği normal kabul ederek sadece en uçtaki birkaç değeri aykırı olarak seçebilir.
+>
+> **Sonuç**
+>
+> -   Z-Skoru yöntemi 5 adet aykırı değer belirledi, çünkü veri seti muhtemelen normal dağılım göstermiyor ve sağa çarpık bir yapıya sahip.
+> -   Standart sapma büyük olduğu için, bazı yüksek gelirler Z-Skoru için "ortalama civarında" kalmış olabilir.
+> -   Eğer veri normal dağılsaydı, standart sapma daha küçük olurdu ve belki daha fazla gözlem aykırı olarak tespit edilirdi.
+> -   Bu yüzden Z-Skoru yöntemi, normal dağılım varsayımına daha iyi uyan veri setlerinde daha doğru çalışır.
+
+#### IQR (Çeyrekler Açıklığı) Yöntemi
+
+IQR (Çeyrekler Açıklığı) yöntemi, veri analistleri ve istatistikçiler tarafından özellikle çarpık dağılımlara sahip veri setlerinde aykırı değerleri tespit etmek için sıkça kullanılır. Finans, sağlık ve makine öğrenmesi gibi alanlarda, uç değerleri belirlemek ve analizleri güvenilir hale getirmek amacıyla tercih edilir. Normal dağılım varsayımı gerektirmediği için Z-Skoru yöntemine kıyasla daha esnek bir yöntemdir. Ancak, belirlenen eşik değerlerin her veri seti için en uygun olmayabileceği unutulmamalıdır. Buna rağmen, veri temizleme ve istatistiksel analiz süreçlerinde yaygın olarak kullanılan sağlam (robust) bir yöntemdir.
+
+IQR yöntemi, alt çeyrek (Q1) ve üst çeyrek (Q3) değerleri arasındaki farkı kullanarak aykırı değerleri belirler.
+
+Bu yöntem, veri setinin merkezi dağılımına odaklanır ve uç değerleri belirlemek için alt (Q1) ve üst (Q3) çeyrekler aralığını kullanır.
+
+-   **Q1 (Alt Çeyrek - %25 Dilim):** Verinin %25’inin altında kaldığı değer.
+
+-   **Q3 (Üst Çeyrek - %75 Dilim):** Verinin %75’inin altında kaldığı değer.
+
+-   **IQR (Interquartile Range - Çeyrekler Açıklığı):** $IQR = Q3 - Q1$
+
+    -   Bu aralık, veri setinin orta %50'lik kısmını temsil eder.
+
+    -   Aykırı değerler, genellikle bu aralığın 1.5 katı kadar alt ve üst limitlerin dışına çıkan değerler olarak tanımlanır.
+
+Aykırı değer sınırları şu şekilde belirlenir:
+
+$\text{Alt Sınır} = Q1 − 1.5 × IQR$ \$\text{Üst Sınır} = Q3 + 1.5 × IQR \$
+
+**Bu sınırların dışına çıkan tüm gözlemler aykırı kabul edilir.**
+
+```{r}
+#| label: iqr-outlier-detection
+#| message: false
+#| warning: false
+#| error: false
+
+# IQR (Çeyrekler Açıklığı) yöntemi ile aykırı değer tespiti
+
+# 1. Gelir değişkeninin alt ve üst çeyreklerini hesapla
+Q1 <- quantile(veri$gelir, 0.25)  # 1. çeyrek (Q1 - %25'lik dilim)
+Q3 <- quantile(veri$gelir, 0.75)  # 3. çeyrek (Q3 - %75'lik dilim)
+
+# 2. IQR hesapla (Q3 - Q1 farkı)
+IQR <- Q3 - Q1  # Çeyrekler arası açıklık (Interquartile Range - IQR)
+
+# 3. Aykırı değer eşiklerini belirleme
+lower_bound <- Q1 - 1.5 * IQR  # Alt sınır
+upper_bound <- Q3 + 1.5 * IQR  # Üst sınır
+
+# 4. Aykırı değerleri tespit etme
+outliers_iqr <- veri$gelir[veri$gelir < lower_bound | veri$gelir > upper_bound]
+
+# 5. Aykırı değerleri görüntüleme
+outliers_iqr
+
+```
+
+> **Neden Daha Fazla Aykırı Değer Bulundu?**
+>
+> Z-Skoru yöntemi sadece 5 değer tespit ederken, IQR yöntemi 10 değer tespit etti. Bunun sebebi nedir?
+>
+> **IQR yöntemi veri dağılımının şeklinden bağımsızdır.**
+>
+> -   Z-Skoru, normal dağılıma bağımlıdır ve standart sapmayı kullanarak eşik belirler.
+> -   IQR yöntemi ise sadece çeyrekler açıklığını dikkate alır.
+> -   Bu nedenle, veri çarpık dağılıma sahipse veya standart sapması büyükse, IQR yöntemi daha fazla aykırı değer bulabilir.
+>
+> **IQR yöntemi ortalamadan etkilenmez, dağılımın orta kısmına odaklanır.**
+>
+> -   Z-Skoru, verinin ortalamasına ve standart sapmasına bağlı olarak çalıştığı için bazı uç noktaları normal kabul edebilir.
+> -   IQR yöntemi, verinin %50'lik merkezi kısmını esas aldığı için aşırı uçları daha kolay tespit eder.
+>
+> **Veri setinde sağa çarpık bir dağılım olabilir.**
+>
+> -   Eğer veri sağa çarpık (right-skewed) ise, ortalama daha yukarı kayar ve Z-Skoru yöntemi bazı uç değerleri kaçırabilir.
+> -   IQR yöntemi, böyle bir durumda yüksek gelire sahip daha fazla müşteriyi aykırı olarak değerlendirebilir.
+>
+> **Sonuç yerine**
+>
+> -   IQR yöntemi, dağılımın orta %50’lik kısmını temel alarak uç değerleri belirler ve standart sapmadan etkilenmez.
+> -   Z-Skoru yöntemi normal dağılım varsayar ve standart sapmaya bağlıdır, bu yüzden bazı uç değerleri normal kabul edebilir.
+> -   Bu nedenle, IQR yöntemi Z-Skoru yöntemine göre daha fazla aykırı değer tespit etmiştir.
+> -   Veri seti normal dağılmış olsaydı, Z-Skoru yöntemi de benzer sayıda aykırı değer bulabilirdi.
+> -   Ancak mevcut durumda veri sağa çarpık (right-skewed) olduğu için IQR yöntemi daha hassas bir tespit yapmıştır.
+
+IQR yöntemi, verinin merkezi dağılımını baz aldığı için özellikle sağa çarpık (asymmetric) veya geniş varyansa sahip veri setlerinde daha fazla aykırı değer tespit edebilir. Bu durumda, IQR yöntemi veriyi daha iyi temsil eden bir metot olarak değerlendirilmelidir.
+
+#### MAD (Ortanca Mutlak Sapma) Yöntemi
+
+MAD (Ortanca Mutlak Sapma) yöntemi, aykırı değerlere karşı dayanıklı (robust) bir istatistiksel yöntemdir ve özellikle çarpık dağılımlarda veya uç değerlerin yoğun olduğu veri setlerinde güvenilir sonuçlar sağlar. Medyan merkezli bir ölçüm olduğu için, ortalama ve standart sapmadan etkilenen Z-Skoru yöntemine kıyasla uç değerlerden daha az etkilenir. Finans, biyomedikal ve makine öğrenmesi gibi alanlarda, aşırı uç noktaların yanlış sınıflandırılmasını önlemek amacıyla sıkça kullanılır. Ancak, hesaplaması Z-Skoru ve IQR yöntemlerine göre daha karmaşıktır ve veri setinin dağılımına bağlı olarak eşik değerlerin dikkatle belirlenmesi gerekir. Dayanıklı yapısı nedeniyle, normal dağılım varsayımı gerektirmeyen veri setlerinde güvenilir bir aykırı değer tespit yöntemi olarak tercih edilir.
+
+Ortanca Mutlak Sapma (MAD) yöntemi, medyanı referans alarak aykırı değerleri belirler ve aşırı uç gözlemlere karşı dayanıklıdır.
+
+Aykırı değer sınırları: - **Alt sınır = Medyan - 3 \* MAD** - **Üst sınır = Medyan + 3 \* MAD**
+
+```{r}
+#| label: mad-outlier-detection
+#| message: false
+#| warning: false
+#| error: false
+
+# MAD (Ortanca Mutlak Sapma) yöntemi ile aykırı değer tespiti
+
+# 1. Gelir değişkeninin MAD değerini hesapla
+mad_value <- mad(veri$gelir)  # Ortanca mutlak sapma (MAD) hesaplanır
+
+# 2. Aykırı değerleri belirleme kriteri:
+# Bir gözlem, medyandan 3 * MAD kadar uzaksa aykırı kabul edilir
+outliers_mad <- veri$gelir[abs(veri$gelir - median(veri$gelir)) > 3 * mad_value]
+
+# 3. Aykırı değerleri görüntüleme
+outliers_mad
+```
+
+> **IQR ve MAD Sonuçlarının Yorumu**
+>
+> 1.  **İki yöntem de aynı 10 aykırı değeri tespit etti.**
+>
+> -   Bu, veri setinin yapısının çarpık olmasına rağmen her iki yöntemin de güvenilir sonuçlar üretebileceğini gösteriyor.
+> -   Eğer veri çok çarpık olsaydı, MAD yöntemi daha farklı bir sonuç verebilirdi.
+>
+> 2.  **IQR yöntemi çeyrekler açıklığını (Q1 ve Q3) kullanırken, MAD yöntemi doğrudan medyan ve sapma ölçüsüne dayanır.**
+>
+> -   Eğer uç değerler çok fazlaysa, IQR yöntemi geniş bir dağılımda bazı noktaları kaçırabilir.
+> -   MAD yöntemi, medyan etrafındaki mutlak sapmaları kullanarak daha geniş çerçevede uç değerleri değerlendirebilir.
+>
+> 3.  **Çok uç değerler mevcut olsaydı, MAD yöntemi daha az hassas olabilirdi.**
+>
+> -   Çünkü MAD, medyana dayalı bir ölçeklendirme kullanır ve uç değerlerin yayılmasını daha küçük bir aralıkta tutabilir.
+> -   IQR yöntemi ise uç değerler belirli bir aralığın dışına çıktığında daha geniş bir kapsama sahip olabilir.
+>
+> **Hangi Durumda Hangi Yöntem Kullanılmalı?**
+>
+> -   Veri normal veya simetrik dağılıma sahipse: IQR yöntemi iyi bir seçim olabilir.
+> -   Veri sağa/sola çarpık dağılıma sahipse veya çok uç değerler varsa: MAD yöntemi daha güvenilir olabilir.
+> -   Eğer veri setinde hem çarpıklık hem de geniş varyasyon mevcutsa: Her iki yöntem birlikte kullanılabilir.
+>     -   Bu durumda, IQR'nin belirlediği sınırları kontrol etmek için MAD yöntemi ek bir test olarak uygulanabilir.
+>
+> **Sonuç: IQR ve MAD Neden Aynı Sonuçları Verdi?**
+>
+> Bu veri setinde her iki yöntemin de aynı 10 gözlemi aykırı olarak belirlemesi, veri setinin yapısından kaynaklanmaktadır.
+>
+> -   Eğer veri daha çarpık olsaydı, MAD yöntemi bazı ek uç noktaları aykırı olarak belirleyebilir veya bazıları için daha dayanıklı kalabilirdi.
+> -   Eğer veri daha homojen dağılıma sahip olsaydı, IQR yöntemi daha dar bir sınır belirleyebilir ve bazı uç noktaları dışarıda bırakabilirdi.
+>
+> Sonuç olarak, veri setindeki çarpıklık düzeyi ve uç noktaların dağılımı bu iki yöntemin aynı sonucu vermesine neden olmuştur.\
+> Eğer veri daha dengesiz bir dağılıma sahip olsaydı, bu iki yöntem arasında belirgin farklılıklar görülebilirdi.
+
+MAD yöntemi, özellikle **veri çarpık dağılım gösterdiğinde veya aşırı uç değerler fazla olduğunda** daha güvenilir sonuçlar verir.
+
+#### Yöntemlerin Karşılaştırılması
+
+| **Durum** | **Önerilen Yöntem** | **R Uygulaması** |
+|------------------|----------------------------|--------------------------|
+| Veri normal dağılmış mı? | Z-Skoru Yöntemi | `abs(scale(veri$deger)) > 3` |
+| Veri normal dağılmamış mı? | IQR Yöntemi | `Q1 - 1.5*IQR, Q3 + 1.5*IQR` |
+| Veri aşırı uç değerlere dayanıklı bir ölçüme mi ihtiyaç duyuyor? | MAD Yöntemi | `median(abs(veri$deger - median(veri$deger)))` |
+
+Her yöntemin **avantaj ve dezavantajları bulunur**, bu yüzden **veri setinin yapısına en uygun olan yöntem seçilmelidir.**
+
+#### Genel Karşılaştırma Tablosu
+
+| **Yöntem** | **Ne Zaman Kullanılır?** | **Avantajları** | **Dezavantajları** |
+|------------------|------------------|------------------|------------------|
+| **Z-Skoru** | Veri normal dağılıyorsa | Kolay uygulanabilir, farklı ölçeklerde çalışır | Normal dağılım varsayımı gerektirir, uç değerlerden etkilenir |
+| **IQR (Çeyrekler Açıklığı)** | Veri normal dağılmıyorsa | Aykırı değerlere dayanıklı, uygulanması kolay | Bazı önemli uç değerleri silebilir |
+| **MAD (Ortanca Mutlak Sapma)** | Aykırı değerlere dayanıklı analiz gerekiyorsa | Uç değerlere duyarlı değil, çarpık dağılımlar için uygun | Hesaplaması biraz daha karmaşıktır |
+
+::: {.callout-note title="Sonuç: Hangi Yöntemi Seçmeli?"}
+Aykırı değer analizi yaparken hangi yöntemin seçileceği, veri setinin yapısına ve dağılım özelliklerine bağlıdır. Z-Skoru yöntemi, normal dağılıma sahip veri setlerinde hızlı bir analiz için uygundur. Ancak, gerçek dünya verilerinde normal dağılım her zaman sağlanamayacağı için, IQR ve MAD gibi uç değerlere dayanıklı (robust) yöntemler daha sık tercih edilmektedir.
+
+IQR yöntemi, çarpık dağılım gösteren verilerde güvenilir bir seçimdir ve veri bilimciler tarafından en yaygın kullanılan yöntemlerden biridir. Bunun nedeni, hesaplamasının kolay olması, aşırı uç değerlerden etkilenmemesi ve dağılım varsayımı gerektirmemesidir. Özellikle finans, ekonomi, sağlık ve makine öğrenmesi gibi alanlarda, verilerin çoğu çarpık dağılım gösterdiğinden IQR yöntemi daha güvenilir bir seçim olarak öne çıkar.
+
+MAD yöntemi ise, aykırı değerlere karşı en dayanıklı yöntem olup, aşırı uç verilerin fazla olduğu ve çarpıklığın aşırı yüksek olduğu durumlarda tercih edilir. Ancak, hesaplaması IQR’ye göre daha karmaşıktır ve belirli senaryolarda daha az hassas olabilir.
+
+**Öneri**: Eğer veri setinin dağılımı bilinmiyorsa, önce histogram veya boxplot ile dağılım incelenmeli ve en uygun yöntem seçilmelidir. Genellikle IQR yöntemi, pratikliği ve güvenilirliği nedeniyle en sık tercih edilen aykırı değer tespit yöntemidir.
+
+**Uygulama Alanı**: Mod, özellikle kategorik verilerde en sık görülen grubu veya sınıfı anlamak için yararlıdır. Sayısal verilerde de merkezi eğilimi gösterir, ancak tüm veri setini tam olarak temsil etmeyebilir.
+
+**Eksiklikler:** Mod her zaman var olmayabilir (tekrarlanan bir değer yoksa). Çok modlu veri setlerinde tek bir merkezi eğilim ölçüsü sağlamak zordur.
+:::
+
+### Çok Değişkenli Aykırı Değer Analizi
+
+Çok değişkenli aykırı değer analizi, bir gözlemin yalnızca tek bir değişken bazında değil, diğer değişkenlerle olan ilişkisine göre de aykırı olup olmadığını belirlemeyi amaçlar.
+
+**Ne zaman kullanılır?**
+
+-   Eğer iki veya daha fazla değişken arasındaki ilişkilere göre aykırı değerleri tespit etmek istiyorsak.
+-   Eğer bir gözlem tek değişken bazında normal görünüyorsa ama diğer değişkenlerle birlikte değerlendirildiğinde aykırıysa.
+
+**Örnek Veri Seti**
+
+Aşağıda, ihracat hacmini etkileyen değişkenleri içeren bir veri seti (**`data_multiple`**) oluşturulmuştur.
+
+```{r}
+#| label: create-multivariate-dataset
+#| message: false
+#| warning: false
+#| error: false
+
+set.seed(123)
+library(tidyverse)
+
+
+data_multiple <- data.frame(
+  firma_id = 1:150,
+  ihracat = c(pmax(rnorm(120, mean = 500000, sd = 100000), 0), 
+              pmax(rnorm(10, mean = 1000000, sd = 200000), 0), 
+              pmax(rnorm(20, mean = 100000, sd = 50000), 0)),  
+  devlet_yardimi = as_factor(sample(c(0, 1), 150, replace = TRUE, 
+                                    prob = c(0.7, 0.3))),      
+ciro = c(pmax(rnorm(130, mean = 2000000, sd = 500000), 0), 
+         pmax(rnorm(10, mean = 5000000, sd = 2000000), 0), 
+         pmax(rnorm(10, mean = 800000, sd = 100000), 0)),  
+ihracat_ulkesi = c(sample(10:50, 120, replace = TRUE), 
+                   sample(30:80, 20, replace = TRUE), 
+                   sample(1:10, 10, replace = TRUE)),  
+calisan_sayisi = c(round(pmax(rnorm(140, mean = 150, sd = 50), 5)), 
+                   round(pmax(rnorm(5, mean = 400, sd = 150), 5)), 
+                   round(pmax(rnorm(5, mean = 20, sd = 5), 5))),  
+  faaliyet_yili = c(sample(1:50, 130, replace = TRUE), 
+                    sample(50:100, 20, replace = TRUE))
+)
+
+head(data_multiple)
+```
+
+Bu `data_multiple` setinde ihracat (bağımlı değişken) ve bağımsız değişkenler olarak devlet yardımı, ciro, ihracat yapılan ülke sayısı, çalışan sayısı ve faaliyet yılı bulunmaktadır.
+
+```{r}
+#| label: veri-ozet-bakis
+#| message: false
+#| error: false
+summary(data_multiple)
+```
+
+> -   **İhracat (Bağımlı Değişken):** Büyük bir dağılım var, bazı firmaların ihracat değeri oldukça düşükken bazıları aşırı yüksek olabilir (potansiyel aykırı değerler var).
+> -   **Devlet Yardımı (Kategori):** Çoğu firma devlet yardımı almıyor, ancak yaklaşık %30'u destek alıyor.
+> -   **Ciro (Bağımsız Değişken):** Ciro ile ihracat arasında büyük farklar olabilir. Bazı firmaların cirosu aşırı yüksek (potansiyel aykırı değerler var).
+> -   **İhracat Yapılan Ülke Sayısı:** Çoğu firma 30-40 ülkeye ihracat yapıyor, ancak 80 ülkeye ihracat yapan firmalar uç değer olabilir.
+> -   **Çalışan Sayısı:** Çalışan sayısında büyük bir değişkenlik var, bazı firmalar küçük ölçekli iken bazıları oldukça büyük.
+> -   **Faaliyet Yılı:** Firma yaşlarında ciddi bir farklılık var. Uzun süredir faaliyet gösteren firmalar ile yeni kurulan firmalar arasında ciddi fark olabilir.
+
+### Aykırı Değer Tespiti ve Veri Setinden Çıkarılması (Çok Değişkenli)
+
+Aykırı değerleri tespit etmek için **Mahalanobis Mesafesi, İzolasyon Ormanı ve DBSCAN yöntemleri** kullanılabilir.
+
+#### Mahalanobis Mesafesi
+
+**Mahalanobis mesafesi**, çok değişkenli aykırı değerleri belirlemek için kullanılan istatistiksel bir yöntemdir. Bu yöntem, bir gözlemin tüm değişkenler açısından veri setinin merkezinden (ortalama vektöründen) ne kadar uzak olduğunu ölçer. Öklidyen mesafeye benzer ancak verinin kovaryans yapısını dikkate alarak ölçek bağımsız ve yön duyarlı bir mesafe ölçüsü sağlar.
+
+Bu mesafe, bir gözlemin merkezden ne kadar farklı olduğunu ölçmek için kullanılır. Değeri ne kadar büyükse, gözlem diğerlerinden o kadar farklıdır ve aykırı olma olasılığı artar.
+
+```{r}
+#| label: mahalanobis-outlier-detection
+#| message: false
+#| warning: false
+#| error: false
+
+# Gerekli paketi yükleyelim (eğer yüklü değilse)
+if (!requireNamespace("MASS", quietly = TRUE)) {
+  install.packages("MASS")
+}
+
+# Gerekli kütüphaneyi çağıralım
+library(MASS)  # Mahalanobis mesafesi hesaplaması için gerekli paket
+
+# Gerekli değişkenleri seçelim
+data_multiple_mahal <- data_multiple[, c("ihracat", "ciro", "ihracat_ulkesi",
+                                         "calisan_sayisi", "faaliyet_yili")]
+
+# Mahalanobis mesafesini hesaplayalım
+mean_vector <- colMeans(data_multiple_mahal)
+cov_matrix <- cov(data_multiple_mahal)
+mahal_dist <- mahalanobis(data_multiple_mahal, mean_vector, cov_matrix)
+
+# Kritik eşik belirleme (χ² testi, df = değişken sayısı, %95 güven aralığı)
+thresh <- qchisq(0.95, df = ncol(data_multiple_mahal))
+
+# Aykırı değerleri belirleyelim (eşik değerini aşan gözlemler aykırıdır)
+data_multiple_mahal$aykiri_mahal <- mahal_dist > thresh
+
+# Aykırı gözlemleri içeren veri setini oluşturalım
+data_multiple_mahal_outlier <- 
+   data_multiple_mahal[data_multiple_mahal$aykiri_mahal == TRUE, ]
+
+# Aykırı gözlemleri ana veri seti ile eşleştirerek devlet yardımı değişkenini ekleyelim
+data_multiple_mahal_result <- data_multiple[data_multiple$firma_id 
+                                            %in% rownames(data_multiple_mahal_outlier), ]
+
+# Yeni veri setini tibble formatında görüntüleyelim
+as_tibble(data_multiple_mahal_result)
+```
+
+> 1.  **Mahalanobis Mesafesi İçin Değişken Seçimi**
+>
+> `data_multiple_mahal <- data_multiple[, c("ihracat", "ciro", "ihracat_ulkesi", "calisan_sayisi", "faaliyet_yili")]`
+>
+> -   Bu değişkenler, çok değişkenli aykırı değer tespiti için neden seçildi?
+>
+> Mahalanobis mesafesi, birden fazla değişken arasındaki ilişkileri dikkate alarak aykırı gözlemleri belirler. Bu nedenle, **doğrudan sayısal değer içeren** ve işletmenin büyüklüğü veya performansını gösteren değişkenler seçilmiştir.
+>
+> | **Değişken** | **Açıklama** | **Neden Seçildi?** |
+> |------------------------|------------------------|------------------------|
+> | **`ihracat`** | Firmanın toplam ihracat miktarı | İşletmenin finansal büyüklüğünü gösterir |
+> | **`ciro`** | Firmanın toplam geliri (cirosu) | Genellikle ihracat ile ilişkilidir, finansal durumu gösterir |
+> | **`ihracat_ulkesi`** | Firmanın ihracat yaptığı ülke sayısı | İşletmenin uluslararası faaliyet kapsamını gösterir |
+> | **`calisan_sayisi`** | Firmanın çalışan sayısı | Firmanın ölçeği ve büyüklüğü hakkında bilgi verir |
+> | **`faaliyet_yili`** | Firmanın kaç yıldır faaliyette olduğu | İşletmenin deneyim seviyesi ve sürdürülebilirliği hakkında bilgi verir |
+>
+> -   Neden `devlet_yardimi` Seçilmedi?
+>     -   Devlet yardımı (0 veya 1) gibi kategorik değişkenler, Mahalanobis mesafesi hesaplamalarında anlamlı değildir.
+>     -   Mahalanobis mesafesi kovaryans matrisine dayandığı için sürekli (sayısal) değişkenler gereklidir.
+>     -   Eğer kategorik değişkenler kullanılmak istenirse, önce one-hot encoding (dummy değişkenler) gibi dönüşümler yapılmalıdır.
+>
+> 2.  **Mahalanobis Mesafesi: Veri Noktalarının Merkezden Uzaklığını Ölçme**
+>
+> -   Ortalama Vektörü Hesaplanıyor
+>
+>     `mean_vector <- colMeans(data_multiple_mahal)`
+>
+>     -   Her değişkenin (sütunun) ortalama değeri hesaplanıyor.
+>     -   Veri setinin merkez noktası belirleniyor.
+>     -   Bu ortalama vektör, gözlemlerin merkeze ne kadar uzak olduğunu hesaplamak için kullanılacak.
+>
+> -   Kovaryans Matrisi Hesaplanıyor
+>
+>     `cov_matrix <- cov(data_multiple_mahal)`
+>
+>     -   Veri setindeki değişkenlerin birbirleriyle ilişkileri ölçülüyor.
+>     -   Değişkenler arasındaki kovaryans hesaplanarak ölçek farkları dengeleniyor.
+>     -   Öklidyen mesafeden farklı olarak, Mahalanobis mesafesi değişkenlerin kovaryans yapısını dikkate alıyor.
+>
+> -   Mahalanobis Mesafesi Hesaplanıyor
+>
+>     `mahal_dist <- mahalanobis(data_multiple_mahal, mean_vector, cov_matrix)`
+>
+>     -   Her gözlemin (satırın) veri setinin merkezine (ortalama vektörüne) olan Mahalanobis mesafesi hesaplanıyor.
+>     -   Bu mesafe ne kadar büyükse, gözlem veri setinin genel yapısından o kadar farklıdır ve aykırı olma ihtimali yüksektir.
+>
+> 3.  **Mahalanobis Mesafesi İçin Ki-Kare Eşik Değeri Hesaplama**
+>
+> Bu kod bloğunda, **Mahalanobis mesafesi için kritik eşik belirleniyor**. İşlemler adım adım şu şekilde gerçekleşiyor:
+>
+> -   Ki-kare Dağılımı Kullanılarak Eşik Değeri Hesaplanıyor
+>
+>     `thresh <- qchisq(0.95, df = ncol(data_multiple_mahal))`
+>
+>     -   `qchisq(0.95, df)` fonksiyonu, ki-kare dağılımının %95’lik yüzdelik dilimini hesaplar.
+>     -   Eğer bir gözlemin Mahalanobis mesafesi bu eşik değerinden büyükse, aykırı kabul edilir.
+>     -   %95 güven aralığı, gözlemlerin %5'inin aykırı kabul edileceğini gösterir.
+>
+> -   Serbestlik Derecesi (df) Belirleniyor
+>
+>     `df = ncol(data_multiple_mahal)`
+>
+>     -   df (derece serbestlik) = Veri setindeki değişken (sütun) sayısıdır.
+>     -   Her eklenen değişken, gözlemlerin çok değişkenli dağılımdaki konumunu etkiler.
+>     -   Bu yüzden df, değişken sayısına eşit alınır.
+
+**Sonuçların Değerlendirilmesi:**
+
+Şu anki veri setimizde **18 tane aykırı değere sahip firma** tespit edildi ve devlet yardımı alan firmalardan 6 tanesi de aykırı olarak tespit edildi.
+
+Bu durum analiz sonuçlarını etkileyebilir çünkü:
+
+-   Eğer bu firmalar aşırı yüksek ihracat yapan firmalar ise, devlet yardımı alan firmaların ihracatlarının genelde arttığına dair yanlış bir çıkarım yapabiliriz.
+-   Tam tersi, eğer bu firmalar aşırı düşük ihracat yapan firmalar ise, devlet yardımı alan firmaların başarısız olduğu gibi hatalı bir sonuç çıkabilir.
+-   Bu yüzden, devlet yardımı alan firmalar içindeki aykırı gözlemleri temizleyerek analiz yapmak daha doğru olacaktır.
+
+**Aykırı Olmayan Gözlemler (Mahalonobis)**
+
+```{r}
+#| label: mahalanobis-aykiri-deger-temiz
+#| message: false
+#| warning: false
+#| error: false
+
+# Aykırı olmayan gözlemleri filtreleyerek temiz bir veri seti oluşturma
+mahal_data_clean <- data_multiple[!data_multiple$firma_id %in% rownames(data_multiple_mahal_result), ]
+
+# Yeni veri setini tibble formatında görüntüleyelim
+as_tibble(mahal_data_clean)
+```
+
+**Sonuç: Mahalanobis Mesafesi Kullanmalı mıyım?**
+
+| Avantajları | Dezavantajları |
+|------------------------------------|------------------------------------|
+| Çok değişkenli aykırı değerleri belirler. | Veri normal dağılmıyorsa yanlış sonuçlar verebilir. |
+| Ölçek bağımsızdır, farklı ölçeklerdeki değişkenleri dengeler. | Çok değişkenli normal dağılım varsayımı yapar. |
+| Değişkenler arasındaki ilişkileri dikkate alır. | Kovaryans matrisi tekillik sorunu yaşayabilir. |
+| Hızlı hesaplanabilir ve yorumlanabilir. | Büyük veri setlerinde hesaplama maliyeti artabilir. |
+
+**Öneri:**
+
+Eğer veri normal dağılıma yakınsa ve doğrusal ilişkiler varsa, Mahalanobis mesafesi güvenilir bir yöntemdir. Ancak, veri çarpık dağılım gösteriyorsa veya çok karmaşıksa, İzolasyon Ormanı (Isolation Forest) veya DBSCAN gibi yöntemler daha uygun olabilir.
+
+**Uygunluk Değerlendirmesi:**
+
+Mahalanobis Mesafesi, eğer veri normal dağılıma yakınsa ve değişkenler arasındaki ilişki doğrusal ise oldukça etkili olabilir. Ancak, bizim veri setimizde değişkenlerin dağılımı normal olmayabilir ve ciro, ihracat gibi değişkenler oldukça değişkenlik gösterebilir. Bu durumda Mahalanobis Mesafesi yanıltıcı sonuçlar verebilir.
+
+#### İzolasyon Ormanı (Isolation Forest)
+
+Isolation Forest, aykırı değerleri tespit etmek için karar ağaçlarına dayalı bir makine öğrenmesi yöntemidir. Bu yöntem, rastgele alt kümeler alarak veri noktalarını izole eder ve bir gözlemin ne kadar hızlı izole edilebildiğini ölçer. Aykırı gözlemler, diğer gözlemlerden daha az bölme (izolasyon) gerektirdiği için, daha düşük derinlikte daha erken izole edilir.
+
+Bu yöntem, verinin dağılımına bağımlı değildir ve büyük veri setlerinde ölçeklenebilir bir yapı sunar. Aykırılık skoru 0 ile 1 arasında değişir ve 1’e yakın değerler gözlemin aykırı olma olasılığını artırır. Özellikle karmaşık veri setlerinde, doğrusal olmayan ilişkileri tespit etmek için kullanışlıdır.
+
+```{r}
+#| label: isolation-forest-outlier-detection
+#| message: false
+#| warning: false
+#| error: false
+
+# Gerekli değişkenleri seçelim
+data_multiple_iso <- data_multiple[, c("ihracat", "ciro", "ihracat_ulkesi",
+                                       "calisan_sayisi", "faaliyet_yili")]
+
+# Gerekli paketi yükleyelim (eğer yüklü değilse)
+if (!requireNamespace("isotree", quietly = TRUE)) {
+  install.packages("isotree")
+   }
+
+# Gerekli kütüphaneyi çağıralım
+library(isotree)  # Isolation Forest modeli için gerekli paket
+
+# Isolation Forest modelini oluşturalım
+iso_model <- isotree::isolation.forest(data_multiple_iso, ntrees = 100)
+
+# Aykırılık skorlarını tahmin edelim
+outlier_scores <- predict(iso_model, data_multiple_iso)
+
+# Aykırı gözlemleri belirleyelim (skoru 0.6'dan büyük olanlar aykırıdır)
+data_multiple_iso$aykiri_iso <- outlier_scores > 0.6
+
+# Aykırı gözlemleri içeren veri setini oluşturalım
+data_multiple_iso_outlier <- 
+   data_multiple_iso[data_multiple_iso$aykiri_iso == TRUE, ]
+
+# Aykırı gözlemleri ana veri seti ile eşleştirerek devlet yardımı 
+# değişkenini ekleyelim
+data_multiple_iso_result <- data_multiple[data_multiple$firma_id %in% 
+                                             rownames(data_multiple_iso_outlier), ]
+
+# Yeni veri setini tibble formatında görüntüleyelim
+as_tibble(data_multiple_iso_result)
+```
+
+> -   **Aykırı Değer Tespiti İçin Gerekli Değişkenlerin Seçilmesi**
+>
+>     `data_multiple_iso <- data_multiple[, c("ihracat", "ciro", "ihracat_ulkesi", "calisan_sayisi", "faaliyet_yili")]`
+>
+>     -   Analizde kullanılacak sayısal değişkenler seçiliyor.
+>     -   Kategorik değişkenler dahil edilmeden sadece sayısal değişkenlerle işlem yapılıyor.
+>
+> -   **Isolation Forest Modelinin Kurulması ve Aykırı Değerlerin Belirlenmesi**
+>
+>     `library(isotree) iso_model <- isotree::isolation.forest(data_multiple_iso, ntrees = 100)`
+>
+>     -   Isolation Forest modeli oluşturuluyor.
+>     -   100 ağaç (ntrees = 100) kullanılarak model eğitiliyor.
+>
+> -   `outlier_scores <- predict(iso_model, data_multiple_iso) data_multiple_iso$aykiri_iso <- outlier_scores > 0.6  # Skoru 0.6'dan büyük olanlar aykırı`
+>
+>     -   Model, her gözlem için bir "aykırılık skoru" hesaplıyor.
+>     -   Skoru 0.6’dan büyük olan gözlemler aykırı olarak kabul ediliyor.
+
+::: {.callout-note title="Ağaç sayısı neye göre belirlenir"}
+Isolation Forest modelinde `ntrees = 100` genellikle hız ve doğruluk arasında iyi bir denge sağladığı için tercih edilir. Her bir ağaç, veri setinden rastgele örnekler alarak gözlemleri izole etmeye çalışır ve bu süreç ne kadar az bölme ile gerçekleşirse, gözlem o kadar aykırı kabul edilir. Daha fazla ağaç kullanmak, modelin daha tutarlı ve stabil sonuçlar vermesini sağlar çünkü her ağaç farklı alt kümelerle eğitildiğinden, tek bir ağacın etkisi azalır ve genel eğilim daha güvenilir hale gelir. Ancak, ağaç sayısının fazla olması işlem süresini artırırken, çok az olması modelin kararsız olmasına yol açabilir. Küçük veri setlerinde `ntrees = 50` genellikle yeterli olurken, orta ölçekli veri setlerinde `ntrees = 100 - 200`, büyük veri setlerinde ise `ntrees = 200+` kullanmak daha iyi sonuç verir. Eğer hız ön planda ise daha az ağaç kullanılabilir, ancak daha hassas aykırı değer tespiti yapılmak isteniyorsa ağaç sayısının artırılması önerilir. Bu nedenle, 100 ağaç genellikle güvenilir ve dengeli bir seçim olarak kabul edilir.
+:::
+
+::: {.callout-note title="0,6 Ne Anlama Geliyor ve Neden Seçildi"}
+Isolation Forest modelinde `predict()` fonksiyonu, her gözlem için bir "aykırılık skoru" (`outlier_scores`) üretir. Bu skor, bir gözlemin model tarafından ne kadar hızlı izole edilebildiğini gösterir. Skor değeri 0 ile 1 arasında değişir ve şu şekilde yorumlanır:
+
+-   0’a yakın skorlar → Normal gözlemler (izole edilmesi zor, yani veri kümesine iyi uyuyor).
+-   1’e yakın skorlar → Aykırı gözlemler (çok hızlı izole edilebiliyor, yani genel dağılımdan çok farklı).
+
+Bu şu anlama gelir: Eğer bir gözlemin Isolation Forest tarafından hesaplanan skoru `0.6`’dan büyükse, bu gözlem aykırı kabul edilir.
+
+Neden `0.6` Seçildi? Daha Fazla veya Daha Az Olamaz mıydı?
+
+Genellikle `0.6`, normal gözlemler ile aykırı gözlemleri ayırt etmek için dengeli bir eşik değeridir. Ancak, analiz yapılan veri setine bağlı olarak bu değer değiştirilebilir. Eğer veri setinde çok fazla aykırı değer olduğu düşünülüyorsa, eşik değeri artırılabilir (0.7 veya 0.8 yapılabilir). Eğer daha fazla gözlem aykırı kabul edilmek isteniyorsa, eşik değeri düşürülebilir (0.5 veya 0.55 yapılabilir).
+:::
+
+> -   **Aykırı Olan Gözlemlerin Seçilmesi**
+>
+>     `data_multiple_iso_outlier <- data_multiple_iso[data_multiple_iso$aykiri_iso == TRUE, ]`
+>
+>     -   Aykırı olarak belirlenen gözlemler ayrı bir veri setine kaydediliyor.
+>
+> -   **Aykırı Gözlemleri Ana Veri Seti ile Eşleştirerek Devlet Yardımı Bilgisinin Eklenmesi**
+>
+>     `data_multiple_iso_result <- data_multiple[data_multiple$firma_id %in% rownames(data_multiple_iso_outlier), ] as_tibble(data_multiple_iso_result)`
+>
+>     -   Aykırı gözlemlerin `firma_id`’si kullanılarak ana veri setindeki devlet yardımı değişkeniyle eşleştirilmesi yapılıyor.
+>     -   Böylece devlet yardımı alan firmalar arasında aykırı olanlar analiz edilebilir.
+
+**Sonuçların Değerlendirilmesi:**
+
+Şu anki veri setimizde 9 tane aykırı değere sahip firma tespit edildi ve bu firmalardan 3 tanesi devlet yardımı almış firmalar arasındadır.
+
+Bu durum analiz sonuçlarını etkileyebilir çünkü:
+
+-   Eğer bu firmalar aşırı yüksek ihracat yapan firmalar ise, devlet yardımı alan firmaların ihracatlarının genelde arttığına dair yanlış bir çıkarım yapabiliriz.
+-   Tam tersi, eğer bu firmalar aşırı düşük ihracat yapan firmalar ise, devlet yardımı alan firmaların başarısız olduğu gibi hatalı bir sonuç çıkabilir.
+-   Bazı firmalar hiç ihracat yapmadığı halde model tarafından aykırı olarak belirlenmiştir, bu da sonuçları yanıltabilir.
+
+Bu yüzden, devlet yardımı alan firmalar içindeki aykırı gözlemleri temizleyerek analiz yapmak daha doğru olacaktır. Böylece, aykırı gözlemlerden kaynaklanan sapmalar engellenerek, devlet desteğinin ihracat üzerindeki etkisi daha sağlıklı bir şekilde ölçülebilir.
+
+**Aykırı Olmayan Gözlemler (Isolation Forest)**
+
+```{r}
+#| label: isolation-forest-aykiri-deger-temiz
+#| message: false
+#| warning: false
+#| error: false
+
+# Aykırı olmayan gözlemleri filtreleyerek temiz bir veri seti oluşturma
+iso_data_clean <- data_multiple[!data_multiple$firma_id 
+                                %in% rownames(data_multiple_iso_outlier), ]
+
+# Yeni veri setini tibble formatında görüntüleyelim
+as_tibble(iso_data_clean)
+```
+
+**Sonuç: Isolation Forest Kullanmalı mıyım?**
+
+| **Avantajları** | **Dezavantajları** |
+|------------------------------------|------------------------------------|
+| Aykırı değerleri belirlemek için dağılım varsayımına ihtiyaç duymaz, veri normal dağılmak zorunda değildir. | Hiperparametre ayarlaması gerektirir, özellikle ağaç sayısı (`ntrees`) ve eşik değeri (`threshold`) analiz sonuçlarını etkileyebilir. |
+| Karmaşık ve doğrusal olmayan ilişkileri tespit edebilir. | Aykırı değerlerin neden aykırı olduğunu doğrudan açıklamaz, yalnızca skorlara dayalı karar verir. |
+| Büyük veri setlerinde ölçeklenebilir, veri hacmi arttığında bile verimli çalışır. | Çok küçük veri setlerinde güvenilirliği azalabilir, az sayıda gözlem olduğunda daha fazla hata yapabilir. |
+| Hızlı çalışır ve hesaplama maliyeti düşüktür, yüksek boyutlu veri setlerinde de uygulanabilir. | Nihai sonuçlar modelin eğitimine bağlıdır, farklı çalıştırmalarda küçük farklılıklar olabilir. |
+
+**Öneri:**
+
+Eğer veri normal dağılmıyorsa, değişkenler arasındaki ilişki karmaşıksa ve büyük veri setleriyle çalışıyorsanız, Isolation Forest güçlü bir alternatiftir. Özellikle yoğunluk bazlı veya doğrusal olmayan aykırı değerleri yakalamak için Mahalanobis mesafesinden daha etkili olabilir.
+
+**Uygunluk Değerlendirmesi:**
+
+Isolation Forest bizim veri setimiz için oldukça uygundur. Firmalar arasındaki büyüklük farklılıklarını ve doğrusal olmayan ilişkileri yakalayabilir. Ayrıca verinin normal dağılım gösterip göstermediği önemli olmadığı için, değişkenler arasındaki ilişkilere dayanarak iyi bir aykırı değer analizi yapabilir. Ancak, eşik değeri (`threshold`) dikkatli seçilmeli ve sonuçlar diğer yöntemlerle karşılaştırılmalıdır.
+
+#### DBSCAN (Yoğunluk Bazlı Kümeleme)
+
+DBSCAN, yoğunluk tabanlı bir kümeleme algoritmasıdır ve yoğunluk düşük alanlarda kalan gözlemleri aykırı olarak kabul eder. Bu yöntem, veri noktalarının yoğunluklarını ölçerek kümeler oluşturur ve belirlenen bir `eps` mesafesi içinde en az `minPts` kadar komşuya sahip olmayan noktaları aykırı değer olarak işaretler.
+
+DBSCAN, önceden belirlenmiş küme sayısına ihtiyaç duymadan çalışır ve karmaşık şekilli kümeleri tespit edebilir. Ancak, veri setine uygun `eps` ve `minPts` değerlerinin dikkatli seçilmesi gereklidir. Küme numarası 0 olan gözlemler aykırı olarak kabul edilir ve bu gözlemler veri setinin genel yoğunluğundan farklı alanlarda bulunur.
+
+```{r}
+#| label: dbscan-aykiri-deger-tespiti
+#| message: false
+#| warning: false
+#| error: false
+
+# Gerekli değişkenleri seçelim
+data_multiple_dbscan <- data_multiple[, c("ihracat", "ciro", "ihracat_ulkesi",
+                                          "calisan_sayisi", "faaliyet_yili")]
+
+# Gerekli paketi yükleyelim (eğer yüklü değilse)
+if (!requireNamespace("dbscan", quietly = TRUE)) {
+  install.packages("dbscan")
+}
+
+# Gerekli kütüphaneyi çağıralım
+library(dbscan)  # DBSCAN kümeleme yöntemi için gerekli paket
+
+# Veriyi ölçekleyelim
+scaled_data <- scale(data_multiple_dbscan)
+
+# DBSCAN modelini oluşturalım
+db_model <- dbscan::dbscan(scaled_data, eps = 1, minPts = 5)
+
+# Aykırı gözlemleri belirleyelim (küme numarası 0 olanlar aykırıdır)
+data_multiple_dbscan$aykiri_dbscan <- db_model$cluster == 0
+
+# Aykırı gözlemleri içeren veri setini oluşturalım
+data_multiple_dbscan_outlier <- 
+   data_multiple_dbscan[data_multiple_dbscan$aykiri_dbscan == TRUE, ]
+
+# Aykırı gözlemleri ana veri seti ile eşleştirerek 
+# devlet yardımı değişkenini ekleyelim
+data_multiple_dbscan_result <- 
+   data_multiple[data_multiple$firma_id %in% rownames(data_multiple_dbscan_outlier), ]
+
+# Yeni veri setini tibble formatında görüntüleyelim
+as_tibble(data_multiple_dbscan_result)
+```
+
+> -   **Aykırı Değer Tespiti İçin Gerekli Değişkenler Seçiliyor**
+>
+>     `data_multiple_dbscan <- data_multiple[, c("ihracat", "ciro", "ihracat_ulkesi", "calisan_sayisi", "faaliyet_yili")]`
+>
+>     -   Analizde kullanılacak sayısal değişkenler seçiliyor.
+>     -   Kategorik değişkenler dahil edilmeden sadece sayısal değişkenler kullanılıyor.
+>
+> -   **Veri Ölçekleniyor**
+>
+>     `scaled_data <- scale(data_multiple_dbscan)`
+>
+>     -   DBSCAN yöntemi, değişkenlerin farklı ölçeklere sahip olması durumunda doğru çalışmayabilir.
+>     -   Bu yüzden, tüm değişkenler `scale()` fonksiyonu ile standartlaştırılıyor (ortalama = 0, standart sapma = 1 olacak şekilde dönüştürülüyor).
+>
+> -   **DBSCAN Modeli Oluşturuluyor ve Aykırı Gözlemler Belirleniyor**
+>
+>     `db_model <- dbscan::dbscan(scaled_data, eps = 1, minPts = 5)`
+>
+>     -   DBSCAN algoritması çalıştırılıyor.
+>     -   `eps = 1`, bir gözlemin kümeye dahil olması için gereken maksimum mesafeyi belirler.
+>     -   `minPts = 5`, bir küme oluşturmak için en az kaç noktanın birbirine yakın olması gerektiğini tanımlar.
+
+::: {.callout-note title="Parametreler Neye Göre Seçildi"}
+DBSCAN algoritmasında **`eps = 1`**, bir noktanın kümeye dahil olabilmesi için gereken maksimum mesafeyi belirler. Küçük `eps` değeri fazla aykırı değer tespitine, büyük `eps` ise kümelerin birleşmesine neden olabilir. **`minPts = 5`**, bir küme oluşturmak için gereken minimum nokta sayısını tanımlar. Çok küçük `minPts` yanlış kümeler oluşturabilir, çok büyük `minPts` ise küçük kümeleri göz ardı edebilir. Bu değerler genellikle veri setine göre optimize edilmelidir.
+:::
+
+> -   DBSCAN, küme numarası `0` olan gözlemleri aykırı olarak kabul eder.
+>
+>     `data_multiple_dbscan$aykiri_dbscan <- db_model$cluster == 0`
+>
+>     -   DBSCAN çıktısından aykırı olan gözlemler (`cluster == 0`) belirleniyor.
+>
+>         Bu kod, DBSCAN algoritmasının çıktılarını kullanarak aykırı değerleri belirliyor. DBSCAN kümeleme yönteminde küme numarası `0` olan gözlemler aykırı olarak kabul edilir. `db_model$cluster` değişkeni, her gözlem için hangi kümeye ait olduğunu gösterir.
+>
+>         Kodda, `db_model$cluster == 0` ifadesi küme numarası `0` olan gözlemleri `TRUE` olarak işaretleyerek aykırı değer olarak belirler ve bu bilgiler `data_multiple_dbscan$aykiri_dbscan` değişkenine kaydedilir. Böylece, aykırı olan ve kümelere dahil edilemeyen gözlemler veri setinde işaretlenmiş olur.
+>
+> -   **Aykırı Gözlemler İçin Yeni Bir Veri Seti Oluşturuluyor**
+>
+>     `data_multiple_dbscan_outlier <- data_multiple_dbscan[data_multiple_dbscan$aykiri_dbscan == TRUE, ]`
+>
+>     -   Sadece aykırı olan gözlemlerden oluşan bir veri seti oluşturuluyor.
+>
+> -   **Aykırı Gözlemleri Ana Veri Seti ile Eşleştirerek Devlet Yardımı Bilgisi Ekleniyor**
+>
+>     `data_multiple_dbscan_result <- data_multiple[data_multiple$firma_id %in% rownames(data_multiple_dbscan_outlier), ]`
+>
+>     -   Aykırı firmaların `firma_id`’leri kullanılarak, ana veri setindeki devlet yardımı bilgisiyle eşleştirme yapılıyor.
+>
+> -   **Sonuçlar Tibble Formatında Görüntüleniyor**
+>
+>     `as_tibble(data_multiple_dbscan_result)`
+>
+>     -   Aykırı değerlerin tibble formatında okunaklı bir şekilde görüntülenmesi sağlanıyor.
+
+**Sonuçların Değerlendirilmesi: DBSCAN Yöntemi ve Aykırı Değerler**
+
+Şu anki veri setimizde DBSCAN yöntemiyle 28 tane aykırı değere sahip firma tespit edilmiştir ve bu firmalardan 5 tanesi devlet yardımı almış firmalar arasındadır.
+
+DBSCAN yöntemi, yoğunluk tabanlı bir kümeleme algoritması olduğu için, veri setinde düşük yoğunlukta kalan firmaları aykırı olarak belirlemiştir. Bu durum özellikle küçük ölçekli firmalar, sınırlı sayıda ülkeye ihracat yapanlar ve ciro açısından diğerlerinden belirgin şekilde farklı olan firmalar için etkili olabilir. Ancak, DBSCAN veri yoğunluğu düşük bölgelerde kalan firmaları doğrudan aykırı kabul ettiği için, iş modelinden kaynaklı olarak farklı özellikler gösteren bazı firmaları da yanlışlıkla aykırı olarak işaretleyebilir.
+
+Bu durum analiz sonuçlarını etkileyebilir çünkü:
+
+-   Eğer tespit edilen aykırı firmalar aşırı yüksek ihracat yapan firmalar ise, devlet yardımı alan firmaların ihracatlarının genelde arttığına dair yanıltıcı bir çıkarım yapılabilir.
+-   Eğer aykırı firmalar düşük ihracat yapan veya ihracatı olmayan firmalar ise, devlet yardımı alan firmaların başarısız olduğu gibi hatalı bir sonuca varabiliriz.
+-   Bazı firmalar model tarafından sadece yoğunluk farkından dolayı aykırı belirlenmiş olabilir, bu da analiz sonuçlarının yanlış yorumlanmasına neden olabilir.
+-   Özellikle büyük cirolara sahip ancak düşük ihracat yapan firmalar model tarafından aykırı olarak işaretlenmiş olabilir, bu da firmanın iş modeline göre farklı değerlendirilmesi gerektiğini gösterir.
+
+DBSCAN yöntemi küme sayısını önceden belirlemeye gerek duymadığı için esnek bir model sunarken, `eps` ve `minPts` parametrelerinin uygun şekilde ayarlanması büyük önem taşır. Eğer `eps` değeri çok küçük seçilmişse çok fazla firma aykırı olarak belirlenebilir, `minPts` değeri çok büyükse bazı aykırı firmalar göz ardı edilebilir.
+
+**Aykırı Olmayan Gözlemler (DBSCAN)**
+
+```{r}
+#| label: dbscan-aykiri-deger-temiz
+#| message: false
+#| warning: false
+#| error: false
+
+# Aykırı olmayan gözlemleri filtreleyerek temiz bir veri seti oluşturma
+dbscan_data_clean <- data_multiple[!data_multiple$firma_id 
+                                   %in% rownames(data_multiple_dbscan_outlier), ]
+
+# Yeni veri setini tibble formatında görüntüleyelim
+as_tibble(dbscan_data_clean)
+```
+
+**Sonuç: DBSCAN Kullanmalı mıyım?**
+
+| **Avantajları** | **Dezavantajları** |
+|------------------------------------|------------------------------------|
+| Önceden belirlenmiş küme sayısına ihtiyaç duymaz, veri yapısına göre esnek çalışır. | Parametre seçimi (`eps` ve `minPts`) sonuçları büyük ölçüde etkiler, yanlış seçilirse ya çok fazla ya da çok az aykırı değer belirlenebilir. |
+| Yoğunluk bazlı olduğu için farklı şekillerdeki kümeleri tespit edebilir ve doğrusal olmayan ilişkileri yakalayabilir. | Düşük yoğunluklu veri setlerinde veya eşit dağılıma sahip verilerde hatalı sonuçlar verebilir, çünkü aykırı değerleri yalnızca yoğunluk farklarına dayalı olarak belirler. |
+| Aykırı değerleri, düşük yoğunluklu bölgelerde kalan noktalar üzerinden belirler, böylece aşırı uç noktaları daha doğal bir şekilde tespit edebilir. | Aykırı değerlerin neden aykırı olduğu konusunda doğrudan bir yorum yapmaz, yalnızca yoğunluk bazlı aykırılık tespiti yapar. |
+| Büyük veri setlerinde iyi çalışır ve kümeler içindeki aykırı değerleri belirlemede başarılıdır. | Yüksek boyutlu veri setlerinde performansı düşebilir, çünkü mesafe hesaplamaları daha karmaşık hale gelir. |
+
+**Öneri**
+
+Eğer veri yoğunluk farklılıkları gösteriyorsa ve kümeler arasında doğal ayrımlar varsa, DBSCAN etkili bir aykırı değer tespit yöntemi olabilir. Ancak, `eps` ve `minPts` değerlerinin dikkatlice belirlenmesi gerekir, aksi takdirde model gereğinden fazla veya yetersiz aykırı değer belirleyebilir. Yoğunluk bazlı aykırılık analizi yapmak istiyorsanız, Mahalanobis mesafesi veya Isolation Forest yerine DBSCAN tercih edilebilir.
+
+**Veri Setimiz İçin Uygunluk Değerlendirmesi**
+
+DBSCAN, yoğunluk bazlı çalıştığı için firmalar arasında belirgin yoğunluk farkları varsa iyi bir sonuç verebilir. Ancak, firmaların büyüklükleri ve iş modelleri doğal olarak farklı olduğu için, DBSCAN’in bazı firmaları yanlışlıkla aykırı olarak belirleme riski vardır.
+
+Sonuç olarak, DBSCAN yöntemi veri setimiz için doğrudan uygun olmayabilir. Eğer firmalar arasında net bir yoğunluk farkı yoksa, Isolation Forest veya Mahalanobis Mesafesi gibi yöntemler daha güvenilir sonuç verebilir.
+
+#### DBSCAN, Isolation Forest ve Mahalanobis Mesafesi Karşılaştırması
+
+| **Kriter** | **DBSCAN** | **Isolation Forest** | **Mahalanobis Mesafesi** |
+|------------------|------------------|------------------|------------------|
+| **Dağılım Varsayımı** | Yok, yoğunluk tabanlı çalışır. | Yok, veri yapısından bağımsız çalışır. | Normal dağılım varsayar, çarpık veri setlerinde sorun olabilir. |
+| **Doğrusal Olmayan İlişkileri Yakalama** | Yüksek, farklı küme yapılarını tanıyabilir. | Yüksek, karmaşık ilişkileri yakalayabilir. | Düşük, doğrusal ilişkilere dayalıdır. |
+| **Büyük Veri Setlerinde Performans** | Orta, yüksek boyutlu veri setlerinde yavaşlayabilir. | Yüksek, büyük veri setleri için ölçeklenebilir. | Orta, yüksek boyutlarda kovaryans matrisinin hesaplanması zorlaşabilir. |
+| **Aykırı Değer Tanımlama Yöntemi** | Düşük yoğunlukta kalan noktaları aykırı kabul eder. | İzolasyon skoru ile veri noktalarını sıralar. | Verinin merkezine olan uzaklığı ölçerek belirler. |
+| **Açıklanabilirlik** | Düşük, neden aykırı olduğunu doğrudan açıklayamaz. | Orta, skor üretir ama sebebi doğrudan açıklayamaz. | Yüksek, matematiksel olarak yorumlanabilir. |
+| **Parametre Hassasiyeti** | Yüksek, `eps` ve `minPts` yanlış seçilirse yanıltıcı olabilir. | Orta, `ntrees` ve `threshold` ayarlanmalıdır. | Orta, eğer kovaryans matrisinde tekillik varsa yanlış sonuç verebilir. |
+
+Devlet yardımlarının ihracata etkisini analiz etmek için **en doğru yöntemin seçilmesi gerekir**, çünkü yanlış belirlenen aykırı değerler analiz sonuçlarını saptırabilir.
+
+-   **DBSCAN yöntemi**, firmalar arasında yoğunluk farkına dayalı olarak aykırı değerleri belirlediği için, devlet yardımı alan ve almayan firmaların doğal yoğunluk farklarını yanlış bir şekilde aykırı değer olarak işaretleyebilir. Bu yüzden DBSCAN bizim analizimiz için uygun değildir.
+
+-   **Mahalanobis Mesafesi yöntemi**, çok değişkenli normal dağılım varsayımı ile çalışır, ancak bizim veri setimizde değişkenlerin normal dağılmaması bu yöntemin güvenilirliğini düşürebilir. Ayrıca, iş dünyasında büyüklük farkları doğrusal olmayabileceği için Mahalanobis Mesafesi bazı büyük ölçekli firmaları hatalı aykırı olarak belirleyebilir.
+
+-   **Isolation Forest**, veri dağılımına bağımlı olmadan, karmaşık ilişkileri tespit edebilir ve büyük veri setlerinde ölçeklenebilir bir yöntemdir. Firmaların farklı büyüklüklerde olmasını dikkate alarak aykırı değerleri belirler. Bu nedenle, devlet yardımlarının ihracata etkisini değerlendirirken en uygun yöntem olarak öne çıkmaktadır.
+
+### Aykırı Değerlerle Ne Yapılmalı?
+
+Aykırı değerler tespit edildikten sonra şu kararlar alınmalıdır:
+
+#### Aykırı Değerlerin Dönüştürülmesi
+
+**Ne zaman kullanılır?**
+
+-   Eğer **aykırı değerleri tamamen silmek istemiyorsak** ama etkilerini azaltmak istiyorsak.
+
+-   Eğer **veri sağa çarpık ise (pozitif çarpıklık varsa)**.
+
+**Uygulanacak Yöntemler:**
+
+| **Durum** | **Önerilen Yöntem** | **R Uygulaması** |
+|------------------------|------------------------|------------------------|
+| Veri sağa çarpık mı? | Log dönüşümü | `log(veri$deger)` |
+| Veri orta derecede çarpık mı? | Karekök dönüşümü | `sqrt(veri$deger)` |
+| Aykırı değerler belli bir aralıkta tutulmalı mı? | Winsorization | `Winsorize(veri$deger, probs=c(0.05, 0.95))` |
+
+### Aykırı Değerlerin İmpute Edilmesi
+
+**Ne zaman kullanılır?**
+
+-   Eğer **veri kaybetmek istemiyorsak**.
+
+-   Eğer **eksik veri yönetimi stratejileri ile uyumlu bir yaklaşım gerekiyorsa**.
+
+**Uygulanacak Yöntemler:**
+
+| **Durum** | **Önerilen Yöntem** | **R Uygulaması** |
+|------------------------|------------------------|------------------------|
+| Verinin merkezi eğilimi korunmalı mı? | Medyan ile doldurma | `median(veri$deger, na.rm = TRUE)` |
+| Verinin değişkenliği korunmalı mı? | Random Forest Imputation | `missForest::missForest(veri)` |
+| Veriye yakın değerler baz alınmalı mı? | kNN İmputation | `DMwR::knnImputation(veri)` |
+
+### Sonuç ve Özet
+
+1.  Öncelikle veriyi inceleyin (Boxplot, Histogram, Özet İstatistikler).
+
+2.  Eğer tek değişkenli analiz gerekiyorsa, IQR, Z-Skoru veya MAD yöntemlerini kullanın.
+
+3.  Eğer çok değişkenli analiz gerekiyorsa, Mahalanobis Mesafesi, İzolasyon Ormanı veya DBSCAN yöntemlerini tercih edin.
+
+4.  Aykırı değerleri temizlerken, silme, dönüştürme veya impute etme seçeneklerini duruma göre belirleyin.
+
+**Referanslar**
+
+<https://naniar.njtierney.com/>
+
+<https://www.rdocumentation.org/packages/mice/versions/3.17.0/topics/mice>
+
+[https://choonghyunryu.github.io/dlookr/ https://rpubs.com/chibueze99/MissingR](https://choonghyunryu.github.io/dlookr/%20https://rpubs.com/chibueze99/MissingR)
+
+<https://stefvanbuuren.name/fimd/>
+
+<https://rmisstastic.netlify.app/tutorials/josse_bookdown_dataanalysismissingr_2020>
+
+<https://rpubs.com/rpatel40/handling_missing_data_in_R>
+
+<https://www.youtube.com/watch?v=Akb401i32Oc&ab_channel=yuzaRDataScience>
+
+<https://ravenfo.com/2021/02/11/aykiri-deger-analizi/>
+
+\newpage

@@ -1,0 +1,397 @@
+# İstatistikte Veri Tipleri
+
+İstatistikte veri tipleri, analiz edilecek verilerin özelliklerine ve ölçüm yöntemlerine göre sınıflandırılır. İki ana gruba ayrılırlar: **Sayısal (Nicel)** ve **Kategorik (Nitel)**. Bu veri tiplerini anlamak, doğru analiz yöntemlerini seçmek için kritik öneme sahiptir.
+
+## Sayısal (Nicel) Veriler
+
+Sayısal veriler, sayılarla ifade edilen ve genellikle miktar veya ölçüm sonucu olan verilerdir. Nicel veriler, sürekli veya kesikli olmak üzere iki alt gruba ayrılır.
+
+### Sürekli (Measured)
+
+-   **Tanım:** Belirli bir aralıkta herhangi bir değer alabilen, ölçümle elde edilen verilerdir. Bu tür veriler genellikle ölçü aletleriyle elde edilir (metre, kilogram, saat vb.).
+-   **Özellikler:**
+    -   Sonsuz sayıda değer alabilir.
+    -   Genellikle ondalıklı değerler içerir.
+-   **Örnekler:**
+    -   Bir kişinin boyu: 175.4 cm
+    -   Bir suyun sıcaklığı: 23.7°C
+    -   Bir koşucunun 100 metreyi tamamlama süresi: 10.53 saniye
+
+### Kesikli (Counted)
+
+-   **Tanım:** Sayılabilir ve yalnızca tam sayı değerleri alabilen verilerdir. Bu tür veriler genellikle bir şeyin sayısını ifade eder.
+-   **Özellikler:**
+    -   Sayılar tam sayıdır; ondalıklı değer almaz.
+-   **Örnekler:**
+    -   Bir sınıfta bulunan öğrenci sayısı: 25
+    -   Bir mağazada satılan ürün adedi: 120
+    -   Bir kişinin aylık kitap okuma sayısı: 3
+
+## Kategorik (Nitel) Veriler
+
+Kategorik veriler, sayısal olmayan ve sınıflar veya gruplar halinde sınıflandırılan verilerdir. Kategorik veriler nominal veya ordinal olarak ikiye ayrılır.
+
+### Nominal (Sırasız)
+
+-   **Tanım:** Belirli bir sıralama içermeyen, yalnızca kategorileri veya sınıfları ifade eden verilerdir.
+-   **Özellikler:**
+    -   Kategoriler arasında bir sıralama yoktur.
+    -   Genellikle metinsel olarak ifade edilir.
+-   **Örnekler:**
+    -   Cinsiyet: Erkek, Kadın
+    -   Kan grubu: A, B, AB, 0
+    -   Göz rengi: Kahverengi, Mavi, Yeşil
+
+### Ordinal (Sıralı)
+
+-   **Tanım:** Kategoriler arasında belirli bir sıralama olan verilerdir. Ancak bu sıralama arasındaki farklar eşit veya kesin değildir.
+-   **Özellikler:**
+    -   Sıralama içerir; ancak farkların büyüklüğü ölçülemez.
+-   **Örnekler:**
+    -   Eğitim düzeyi: İlkokul, Ortaokul, Lise, Üniversite
+    -   Müşteri memnuniyeti: Çok memnun, Memnun, Nötr, Memnun Değil
+    -   Yarış sıralaması: 1., 2., 3.
+
+::: {.callout-note title="Veri Tiplerinin Seçimi ve Önemi"}
+1.  **Sayısal Veriler:** İstatistiksel analizlerde genellikle aritmetik işlemlere uygundur. Örneğin, bir grup insanın boy ortalamasını hesaplamak.
+2.  **Kategorik Veriler:** Genellikle gruplama ve sınıflandırma için kullanılır. Örneğin, farklı kan gruplarının bir popülasyondaki dağılımını analiz etmek.
+:::
+
+## Özet Tablo
+
+| **Veri Tipi** | **Tanım** | **Örnekler** |
+|----|----|----|
+| **Sürekli** | Ölçülen, belirli bir aralıkta değer alır | Boy: 175.4 cm, Sıcaklık: 23.7°C |
+| **Kesikli** | Sayılan, yalnızca tam sayı değer alır | Öğrenci sayısı: 25, Ürün adedi: 120 |
+| **Nominal** | Sırasız kategoriler | Cinsiyet: Erkek, Kadın; Göz rengi: Mavi, Yeşil |
+| **Ordinal** | Sıralı kategoriler | Eğitim düzeyi: Lise, Üniversite; Yarış sıralaması: 1., 2. |
+
+Veri türlerinin anlaşılması, doğru istatistiksel analiz yöntemlerini seçmek ve sonuçları daha iyi yorumlamak için önemlidir.
+
+# R'da Veri Tipleri ve Veri Yapıları
+
+## Veri Tipleri
+
+R'daki veri tipleri, bir değişkenin bellekte nasıl saklandığını ve ne tür işlemler yapılabileceğini belirleyen temel yapı taşlarıdır. Bu veri tiplerini anlamak, R'da verilerle etkin bir şekilde çalışmanın anahtarıdır. Veri tipleri, hangi tür veriyi nasıl sakladığımızı ve bu veriyle ne tür işlemler yapabileceğimizi belirler. Aşağıda, R'da kullanılan temel veri tiplerini ve kullanım alanlarını bulabilirsiniz:
+
+### `Numeric` (Sayısal)
+
+-   **Tanım:** Ondalıklı veya tam sayıları ifade eder. Bu tip, en yaygın kullanılan veri türüdür.
+-   **Özellikler:**
+    -   Hem tam sayılar hem de ondalıklı sayılar bu kategoridedir.
+    -   Varsayılan olarak, sayılar `numeric` olarak tanımlanır.
+
+```{r}
+#| label: numeric-class-check
+#| warning: false
+#| message: false
+
+# Sayısal bir tam sayı tanımlama
+sayi <- 42
+
+# Ondalıklı bir sayı tanımlama
+ondalikli <- 3.14
+
+# Değişkenlerin sınıflarını kontrol etme
+class(sayi)        # "numeric"
+class(ondalikli)   # "numeric"
+```
+
+-   **Kullanım Alanı:** Matematiksel işlemler, istatistiksel hesaplamalar ve ölçüm verileri.
+
+### `Integer` (Tamsayı)
+
+-   **Tanım:** Tam sayıları temsil eder. Numeric tipine benzer, ancak yalnızca tam sayı değerleri içerir.
+
+-   **Özellikler:** Tamsayı olarak bir değer belirtmek için `L` eklenir (örneğin, `5L`).
+
+```{r}
+#| label: integer-class-check
+#| warning: false
+#| message: false
+
+# Tamsayı bir değişken tanımlama
+tamsayi <- 100L
+
+# Değişkenin sınıfını kontrol etme
+class(tamsayi)  # "integer"
+```
+
+-   **Kullanım Alanı:** İndeksleme, sayaçlar veya tam sayı gerektiren işlemler.
+
+### `Character` (Karakter)
+
+-   **Tanım:** Metinsel verileri temsil eder. Kelimeler, cümleler veya herhangi bir metin bilgisi için kullanılır.
+-   **Özellikler:** Değerler çift tırnak (`"`) veya tek tırnak (`'`) ile tanımlanır.
+
+```{r}
+#| label: character-class-check
+#| warning: false
+#| message: false
+
+# Metin türünde bir değişken tanımlama
+metin <- "Merhaba R"
+
+# Değişkenin sınıfını kontrol etme
+class(metin)  # "character"
+```
+
+-   **Kullanım Alanı:** İsimler, açıklamalar, kategorik veriler veya etiketler.
+
+### `Logical` (Mantıksal)
+
+-   **Tanım:** Doğru (`TRUE`) veya yanlış (`FALSE`) durumlarını ifade eder.
+-   **Özellikler:** Mantıksal veri tipleri, genellikle koşullu ifadelerde kullanılır.
+
+```{r}
+#| label: logical-class-check
+#| warning: false
+#| message: false
+
+# Mantıksal değişkenler tanımlama
+dogru_mu <- TRUE
+yanlis_mi <- FALSE
+
+# Değişkenin sınıfını kontrol etme
+class(dogru_mu)  # "logical"
+```
+
+-   **Kullanım Alanı:** Koşullar, filtreleme ve kontrol akışları.
+
+### `Complex` (Karmaşık)
+
+-   **Tanım:** Karmaşık sayılar, reel ve sanal bileşenleri içeren sayılardır.
+-   **Özellikler:** Karmaşık sayıların biçimi: `a + bi` (örneğin, `2 + 3i`).
+
+```{r}
+#| label: complex-class-check
+#| warning: false
+#| message: false
+
+# Karmaşık sayı tanımlama
+karmasik <- 1 + 2i
+
+# Değişkenin sınıfını kontrol etme
+class(karmasik)  # "complex"
+```
+
+-   **Kullanım Alanı:** Matematikte, özellikle ileri düzey hesaplamalarda.
+
+### `Factor` (Faktör)
+
+-   **Tanım:** Faktörler, kategorik verilerin saklanması için kullanılır. Bu tip, sınıflandırma ve seviyelendirme için idealdir.
+-   **Özellikler:**
+    -   Faktörler, seviyeler (`levels`) adı verilen kategorileri içerir.
+    -   Bellek kullanımı açısından verimlidir.
+
+```{r}
+#| label: factor-class-check
+#| warning: false
+#| message: false
+
+# Faktör türünde bir değişken tanımlama
+cinsiyet <- factor(c("Erkek", "Kadın", "Kadın"))
+
+# Değişkenin sınıfını kontrol etme
+class(cinsiyet)      # "factor"
+
+# Faktör seviyelerini görüntüleme
+levels(cinsiyet)     # "Erkek" "Kadın"
+```
+
+-   **Kullanım Alanı:** Anket yanıtları, kategorik değişkenler ve gruplama.
+
+::: {.callout-note title="Veri Tiplerini Bilmek Neden Önemlidir?"}
+1.  **Bellek Yönetimi:** Doğru veri tipini kullanmak, bellek verimliliği sağlar.
+2.  **Doğru Hesaplamalar:** Veri tipi yanlış seçilirse, beklenmeyen sonuçlar veya hata mesajları alınabilir.
+3.  **Dönüşüm:** Veri tiplerini bilmek, gerekli dönüşümleri yaparak (örneğin, sayısaldan karaktere) veriyle daha esnek çalışmayı mümkün kılar.
+
+**Örnek Dönüşüm:**
+
+```{r}
+#| label: numeric-to-character-conversion
+#| warning: false
+#| message: false
+
+# Numeric bir değişken tanımlama
+sayi <- 123
+
+# Numeric'ten karaktere dönüşüm
+karakter <- as.character(sayi)
+
+# Dönüştürülen değişkenin sınıfını kontrol etme
+class(karakter)  # "character"
+```
+
+Veri tiplerini anlamak, R'da verileri işlemek için temel bir adımdır ve verilerle daha etkili bir şekilde çalışmanızı sağlar.
+:::
+
+## Veri Yapıları
+
+R'daki veri yapıları, verilerin nasıl organize edildiğini ve işlendiğini belirler. Farklı boyut ve türdeki veri kümelerini temsil etmek için çeşitli veri yapıları kullanılır. Aşağıda, R'da kullanılan temel veri yapıları ve bu yapıların nasıl kullanılabileceği açıklanmıştır:
+
+### `Vector` (Vektör)
+
+-   **Tanım:** Homojen bir veri yapısıdır; yalnızca bir tür veri içerir (örneğin, tümü sayısal veya tümü karakter).
+-   **Özellikler:** Bir vektör, `c()` fonksiyonu ile oluşturulur.
+
+```{r}
+#| label: vector-class-check
+#| warning: false
+#| message: false
+
+# Sayısal bir vektör tanımlama
+sayisal_vektor <- c(1, 2, 3, 4, 5)
+
+# Karakter bir vektör tanımlama
+karakter_vektor <- c("Ali", "Asya", "Mehmet")
+
+# Vektörlerin sınıfını kontrol etme
+class(sayisal_vektor)    # "numeric"
+class(karakter_vektor)   # "character"
+```
+
+-   **Kullanım Alanı:** Basit veri listeleri, bir boyutlu veriler.
+
+### `Matrix` (Matris)
+
+-   **Tanım:** İki boyutlu ve homojen bir veri yapısıdır; yalnızca bir tür veri içerir.
+-   **Özellikler:** Matris, `matrix()` fonksiyonu ile oluşturulur.
+
+```{r}
+#| label: matrix-class-check
+#| warning: false
+#| message: false
+
+# Bir matris tanımlama
+matris <- matrix(1:6, nrow = 2, ncol = 3)
+
+# Matrisi ekrana yazdırma
+print(matris)
+
+# Matrisin sınıfını kontrol etme
+class(matris)  # "matrix"
+```
+
+-   **Kullanım Alanı:** Matematiksel hesaplamalar ve matris işlemleri.
+
+### `Array` (Dizi)
+
+-   **Tanım:** Çok boyutlu ve homojen bir veri yapısıdır.
+-   **Özellikler:** Bir dizi, `array()` fonksiyonu ile oluşturulur.
+
+```{r}
+#| label: array-class-check
+#| warning: false
+#| message: false
+
+# Bir dizi (array) tanımlama
+dizi <- array(1:12, dim = c(2, 3, 2))
+
+# Diziyi ekrana yazdırma
+print(dizi)
+```
+
+-   **Kullanım Alanı:** Daha yüksek boyutlu verilerle çalışmak.
+
+### `Data Frame` (Veri Çerçevesi)
+
+-   **Tanım:** Heterojen bir veri yapısıdır; farklı türde veriler içerebilir (örneğin, sayısal ve karakter birlikte).
+-   **Özellikler:** Bir veri çerçevesi, `data.frame()` fonksiyonu ile oluşturulur.
+
+```{r}
+#| label: data-frame-example
+#| message: false
+#| warning: false
+
+# Bir veri çerçevesi (data frame) tanımlama
+veri_cercevesi <- data.frame(
+    ID = c(1, 2, 3),              # Kimlik numarası sütunu
+    Ad = c("Ahmet", "Asya", "Mehmet"), # İsim sütunu
+    Yas = c(25, 30, 22)           # Yaş sütunu
+)
+
+# Veri çerçevesini ekrana yazdırma
+print(veri_cercevesi)
+```
+
+-   **Kullanım Alanı:** Tablo formatında veriler.
+
+::: {.callout-note title="Neden data.frame() yerine tibble() tercih edilebilir?"}
+-   **Daha kullanıcı dostudur:** Tibble, büyük veri setlerinde sadece ilk birkaç satırı göstererek konsol çıktısını okunabilir hale getirir.
+-   **Modern veri analizi için optimize edilmiştir:** `tidyverse` ekosistemiyle tam uyumlu çalışır ve pipeline (`%>%`) kullanımıyla veri manipülasyonunu kolaylaştırır.
+-   **Varsayılan davranışları daha sezgiseldir:** Karakter vektörlerini `factor`'a dönüştürmez, sütun isimlerinde esneklik sunar ve veri işleme sürecinde sık yapılan hataları önler.
+
+```{r}
+#| label: tibble-example
+#| message: false
+#| warning: false
+
+# Gerekli kütüphanenin yüklenmesi
+library(tidyverse)
+
+# Bir tibble tanımlama
+tb <- tibble(
+    isim = c("Ahmet", "Asya", "Mehmet"),  # İsim sütunu (character)
+    yas = c(25, 30, 22),                  # Yaş sütunu (numeric)
+    evli = c(TRUE, FALSE, FALSE)          # Evli durumu sütunu (logical)
+)
+
+# Tibble'ı ekrana yazdırma
+print(tb)
+```
+:::
+
+::: {.callout-note title="Veri Yapılarının Seçimi"}
+Veri yapılarının doğru seçimi, veri analizi ve modelleme işlemlerini daha verimli hale getirir.
+:::
+
+### `List` (Liste)
+
+-   **Tanım:** Heterojen bir veri yapısıdır; herhangi bir veri türünü içerebilir.
+-   **Özellikler:** Bir liste, `list()` fonksiyonu ile oluşturulur.
+-   **Örnekler:**
+
+```{r}
+#| label: list-example
+#| message: false
+#| warning: false
+
+# Bir liste tanımlama
+liste <- list(
+    isim = "Ayşe",              # Karakter eleman
+    yas = 30,                   # Sayısal eleman
+    evli = TRUE,                # Mantıksal eleman
+    sayilar = c(1, 2, 3)        # Vektör eleman
+)
+
+# Listeyi ekrana yazdırma
+print(liste)
+```
+
+-   **Kullanım Alanı:** Birden fazla veri türünü aynı yapıda saklamak.
+
+::: {.callout-note title="Veri Yapılarının Seçimi"}
+1.  **Boyut ve Tür:** Verinin boyutu (tek boyutlu, iki boyutlu, çok boyutlu) ve türü (homojen, heterojen) veri yapısını seçerken belirleyicidir.
+2.  **Hafıza Kullanımı:** Daha büyük veri yapıları için belleği etkili kullanmak önemlidir.
+3.  **Uygulama:** Veri yapıları, analiz türüne göre seçilir. Örneğin:
+    -   Basit veriler için vektör.
+    -   Tablo formatı için veri çerçevesi.
+    -   İleri düzey hesaplamalar için matris veya diziler.
+
+Veri yapılarının doğru seçimi, veri analizi ve modelleme işlemlerini daha verimli hale getirir.
+:::
+
+**Referanslar**
+
+[https://www.w3schools.com/r/r_variables.asp https://www.modernstatisticswithr.com/](https://www.w3schools.com/r/r_variables.asp%20https://www.modernstatisticswithr.com/)
+
+<https://openintro-ims.netlify.app/exploratory-data-analysis>
+
+<https://trevorfrench.github.io/R-for-Data-Analysis/p1c3-data-types.html>
+
+<https://www.w3schools.com/r/r_data_types.asp>
+
+<https://app.datacamp.com/learn/courses/introduction-to-statistics-in-r>
+
+\newpage

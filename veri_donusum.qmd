@@ -1,0 +1,14 @@
+---
+title: "Veri Dönüşümleri"
+---
+
+Etki değerlendirme süreçleri, bir politika ya da müdahalenin hedeflenen sonuçlara ulaşıp ulaşmadığını belirlemek amacıyla yürütülen sistematik analizleri kapsar. Bu süreçlerin güvenilir olması, doğru yöntemlerin uygulanması kadar, kullanılan veri setlerinin eksiksiz, tutarlı ve analiz için uygun hale getirilmesine de bağlıdır. Veri analizine başlamadan önce, veri manipülasyonu ve veri temizleme aşamalarının dikkatlice yürütülmesi, elde edilen sonuçların doğruluğunu artırarak karar alıcıların daha sağlıklı değerlendirmeler yapmasına olanak tanır. Eksik veya yanlış işlenmiş verilerle yürütülen analizler, politika etkilerinin hatalı hesaplanmasına ve yanıltıcı çıkarımlara neden olabilir.
+
+Veri manipülasyonu, ham verinin analiz için uygun hale getirilmesi sürecini kapsayan işlemleri ifade eder. Sütun seçimi, satır filtreleme, değişken dönüştürme ve verinin istatistiksel olarak özetlenmesi gibi işlemler, veri setinin daha anlamlı ve analiz edilebilir hale getirilmesini sağlar. Manipülasyon aşaması, özellikle büyük veri setlerinde gereksiz veya tekrarlayan bilgilerin çıkarılması, eksik gözlemlerin yönetilmesi ve veri yapısının modelleme için optimize edilmesi gibi kritik adımları içermektedir.
+
+Bununla birlikte, veri analizinin güvenilirliği açısından veri temizleme süreci büyük önem taşımaktadır. Veri setlerinde eksik değerler, aykırı gözlemler, yanlış formatlanmış değişkenler veya hatalı kayıtlar bulunabilir. Bu tür veriler, analiz süreçlerini olumsuz etkileyerek yanlış sonuçlara yol açabilir. Eksik verilerin doldurulması, aykırı değerlerin yönetilmesi ve verinin standardizasyonu gibi işlemler, analiz sürecinin daha sağlıklı ilerlemesini sağlar. Veri temizleme aşamasında eksik değerlerin nasıl ele alınacağı, hatalı girişlerin nasıl tespit edileceği ve veri türlerinin nasıl dönüştürüleceği gibi konular titizlikle ele alınmalıdır.
+
+Bu çalışma, etki değerlendirme süreçlerinde veri manipülasyonu ve veri temizleme adımlarının nasıl gerçekleştirileceğini ele alarak, R programlama dili ve Quarto platformu aracılığıyla uygulanabilir bir rehber sunmayı amaçlamaktadır. Eksiksiz, temizlenmiş ve analiz için optimize edilmiş veri setleri, etki değerlendirme süreçlerinin güvenilirliğini artırarak politika yapıcıların daha sağlam kararlar almasına katkı sağlayacaktır.
+
+
+\newpage

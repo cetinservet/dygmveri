@@ -1,0 +1,341 @@
+# Giriş
+
+## Etki Değerlendirmede Verinin Önemi
+
+Etki değerlendirmesi, belirli bir politika, program veya müdahalenin hedeflenen sonuçlara ulaşıp ulaşmadığını belirlemek amacıyla kullanılan sistematik bir analiz sürecidir. Kamu politikalarından sosyal programlara, ekonomik teşviklerden eğitim reformlarına kadar geniş bir yelpazede kullanılan etki değerlendirmesi, uygulanan müdahalelerin etkisini bilimsel yöntemlerle ölçerek politika yapıcıların bilinçli kararlar almasına olanak tanır.
+
+Bu sürecin temel taşı veridir. Doğru, güvenilir ve kapsamlı veri olmadan, yapılan değerlendirmelerin bilimsel temeli zayıf kalır ve yanlış yönlendirmelere yol açabilir. Verinin toplanması, temizlenmesi, analiz edilmesi ve yorumlanması, etki değerlendirme süreçlerinin başarılı bir şekilde yürütülmesini sağlar.
+
+Örneğin, bir devlet destek programının istihdam üzerindeki etkisini ölçmek için destek alan ve almayan firmaların karşılaştırılması gerekir. Ancak, bu firmalara ait eksik veya yanlış veriler kullanılırsa, programın gerçek etkisi olduğundan farklı yorumlanabilir ve politika yapıcılar yanlış çıkarımlar yapabilir. Benzer şekilde, eğitimde yapılan reformların öğrenci başarısı üzerindeki etkisini anlamak için kullanılan veriler eksik, hatalı veya yanlı olduğunda, değerlendirme süreci yanıltıcı hale gelebilir.
+
+Etki değerlendirmesinde veri, yalnızca mevcut bir politikanın değerlendirilmesi için değil, aynı zamanda gelecekte uygulanacak politikaların tasarlanması için de kritik öneme sahiptir. Politika yapıcılar, geçmiş verileri analiz ederek benzer müdahalelerin hangi koşullarda daha etkili olduğunu belirleyebilir ve gelecekte daha iyi planlanmış projeler oluşturabilir.
+
+Bu nedenle, etki değerlendirme süreçlerinde veri toplama, işleme, temizleme ve analiz etme aşamalarının dikkatli bir şekilde yürütülmesi gerekir. Kaliteli veri olmadan yapılan değerlendirmeler, yanlış politika kararlarına ve kamu kaynaklarının verimsiz kullanımına yol açabilir.
+
+### Etki Değerlendirmesinde Verinin Rolü
+
+Etki değerlendirmesinde kullanılan veri, bir politikanın ya da programın öncesi ve sonrası durumlarını karşılaştırmak, neden-sonuç ilişkilerini ortaya koymak ve karar vericilere bilimsel temellere dayalı öneriler sunmak için kritik bir araçtır. Verinin doğru kullanımı sayesinde, politika yapıcılar hizmetlerin etkinliğini artırabilir, kaynakları verimli yönetebilir ve hedef grupların ihtiyaçlarını daha iyi karşılayabilir.
+
+Örneğin, bir devlet destek programının istihdam üzerindeki etkisini ölçmek için iş gücü piyasası verilerine ihtiyaç vardır. Destek alan firmaların ve almayan firmaların karşılaştırılması, programın gerçekten istihdamı artırıp artırmadığını anlamamıza yardımcı olur.
+
+### Etki Değerlendirmede Veri Türleri ve Kaynakları
+
+Etki değerlendirmesi için kullanılan veriler farklı kaynaklardan ve formatlardan gelebilir. Başlıca veri türleri şunlardır:
+
+#### Kesitsel ve Panel Veri
+
+-   **Kesitsel Veri**: Tek bir zaman dilimindeki bireyleri, firmaları veya bölgeleri analiz eder.
+-   **Panel Veri**: Aynı birimleri farklı zaman dilimlerinde gözlemleyerek zaman içindeki değişimleri analiz etmeye olanak tanır.
+
+#### Nicel ve Nitel Veri
+
+-   **Nicel Veriler**: Sayısal olarak ifade edilen, ölçülebilir değişkenlerdir (örneğin, gelir, istihdam oranı, üretim miktarı).
+-   **Nitel Veriler**: Katılımcı görüşleri, anket yanıtları veya mülakat sonuçları gibi kalitatif bilgileri içerir.
+
+### Etki Değerlendirme Modelleri ve Verinin Kullanımı
+
+Etki değerlendirme sürecinde kullanılan yöntemler, verinin nasıl toplandığını ve analiz edildiğini belirler. Kullanılan yöntemler, verinin zaman içindeki değişimini ve müdahalelerin etkisini anlamamıza yardımcı olur.
+
+-   **Difference-in-Differences (DiD)**: Müdahale öncesi ve sonrası verileri karşılaştırarak etkiyi belirler.
+-   **Propensity Score Matching (PSM)**: Müdahale alan ve almayan bireyleri benzer özelliklere göre eşleştirerek daha doğru karşılaştırmalar yapar.
+-   **Instrumental Variables (IV)**: Nedenselliği ölçmek için kullanılan yöntemlerden biridir.
+
+Bu yöntemlerin sağlıklı çalışabilmesi için doğru veri toplama, temizleme ve analiz süreçlerinin uygulanması gerekmektedir.
+
+### Neden Veri Olmazsa Etki Değerlendirme Yapılamaz?
+
+Etki değerlendirmesi veriye dayalı bir süreçtir ve doğru kararlar alabilmek için güvenilir, eksiksiz ve analiz edilebilir veri setlerine ihtiyaç vardır. Eğer veri eksik, hatalı veya yanlı ise, politika değerlendirmeleri yanlış sonuçlar verebilir ve bu da yanlış politika kararlarına yol açabilir.
+
+**Veri olmadan etki değerlendirme yapılamaz çünkü:**
+
+-   Müdahalenin etkisini ölçmek için karşılaştırmalar yapılamaz.
+-   Politika önerileri bilimsel dayanağa sahip olmaz.
+-   Kaynakların verimli kullanımı garanti edilemez.
+-   Sonuçların doğruluğu sorgulanır ve politika yapıcılar yanlış yönlendirilebilir.
+
+Bu nedenle, veri toplama, temizleme, analiz etme ve raporlama süreçlerinin doğru yönetilmesi, etkili bir etki değerlendirmesi için kritik öneme sahiptir.
+
+## Etki Değerlendirmede Veri Seti Nasıl Olmalı?
+
+Etki değerlendirmesi, belirli bir politika, program veya müdahalenin beklenen sonuçları üretip üretmediğini anlamak için kullanılan analitik bir süreçtir. Bu sürecin başarısı, kullanılan veri setinin doğruluğuna, kapsamına ve analiz için uygunluğuna bağlıdır. Eğer veri seti eksik, tutarsız veya hatalı ise, analizler yanlış yönlendirme yapabilir ve alınan politika kararları gerçek durumu yansıtmayabilir.
+
+İyi bir etki değerlendirme veri seti, yalnızca mevcut bir politikayı veya müdahaleyi analiz etmekle kalmaz, aynı zamanda gelecekteki karar süreçlerine de rehberlik eder. Doğru yapılandırılmış bir veri seti, karar alıcıların ve araştırmacıların müdahale öncesi ve sonrası durumları kıyaslamasına, neden-sonuç ilişkilerini analiz etmesine ve politika önerilerini bilimsel temellere dayandırmasına olanak tanır.
+
+Ancak, etki değerlendirme sürecinde kullanılan veri setleri çeşitli eksiklikler, hatalar ve metodolojik zorluklar içerebilir. Eksik veriler, aykırı değerler, yanlış kodlanmış değişkenler, zaman uyumsuzluğu ve örneklem seçim yanlılığı gibi sorunlar analizlerin güvenilirliğini ciddi şekilde etkileyebilir. Bu nedenle, veri setinin etki değerlendirmesi için hazırlanma süreci titizlikle yürütülmelidir.
+
+Bu bölümde, etki değerlendirme için ideal bir veri setinin nasıl olması gerektiği, hangi bileşenleri içermesi gerektiği ve hangi kalite standartlarını karşılaması gerektiği ayrıntılı olarak ele alınacaktır. Ayrıca, etki değerlendirme yöntemleriyle uyumlu veri yapılarının nasıl oluşturulması gerektiği ve veri setlerinin güvenilir analizler için nasıl hazırlanması gerektiği açıklanacaktır.
+
+### Veri Setinin Temel Yapısı
+
+Etki değerlendirmesi için kullanılan veri setleri genellikle gözlemler (satırlar) ve değişkenlerden (sütunlar) oluşur. Her satır, bir birey, firma, bölge veya politika müdahalesine tabi olan bir birimi temsil eder. Her sütun ise bu birime ilişkin farklı değişkenleri içerir.
+
+Veri setinde şu temel bileşenler bulunmalıdır:
+
+-   **Kimlik Bilgileri (ID değişkenleri)**: Özniteliklerin eşleşmesini sağlayan benzersiz bir kimlik numarası (örn. birey ID, firma ID, bölge kodu vb.).
+-   **Bağımlı Değişken (Sonuç Değişkeni)**: Politika veya müdahalenin etkilediği değişken (örn. istihdam, gelir, eğitim seviyesi vb.).
+-   **Bağımsız Değişkenler**: Etkiyi belirleyen veya kontrol değişkeni olarak kullanılan faktörler (örn. yaş, sektör, hanehalkı büyüklüğü, ekonomik göstergeler vb.).
+-   **Müdahale Değişkeni (Tedavi/Müdahale Değişkeni):** Müdahaleye maruz kalıp kalmadığını gösteren değişken (örn. 1 = müdahale aldı, 0 = almadı).
+-   **Zaman Değişkeni:** Etki değerlendirmesi zaman serileri veya panel veri ile yapılıyorsa tarih veya yıl değişkeni.
+
+**Örnek bir etki değerlendirme veri seti** (Panel veri yapısında):
+
+| ID  | Yıl  | Müdahale | Gelir | Eğitim Yılı | Sektör | Bölge    |
+|-----|------|----------|-------|-------------|--------|----------|
+| 101 | 2018 | 0        | 5000  | 12          | Hizmet | İstanbul |
+| 101 | 2019 | 1        | 6000  | 12          | Hizmet | İstanbul |
+| 102 | 2018 | 0        | 4500  | 10          | Tarım  | Ankara   |
+| 102 | 2019 | 1        | 5500  | 10          | Tarım  | Ankara   |
+
+Bu yapıda **müdahale değişkeni**, bireyin politikadan önce ve sonra nasıl değiştiğini anlamamıza yardımcı olur.
+
+### Veri Setinin Kalite Kriterleri
+
+Etki değerlendirme veri setlerinin yüksek kaliteli olması için şu kriterlere uyması gerekir:
+
+-   **Eksiksiz ve Tutarlı Olmalı**: Tüm birimler ve zaman dilimleri için eksiksiz veri içermeli, tutarsız girişlerden kaçınılmalıdır.
+
+-   **Temizlenmiş Olmalı**: Eksik veriler tamamlanmalı, aykırı değerler kontrol edilmeli ve veriler doğru formatta saklanmalıdır.
+
+-   **Tekilleştirilmiş Olmalı**: Aynı birime ait birden fazla satır veya çakışan kayıtlar olmamalıdır.
+
+-   **Standartlaştırılmış Olmalı**: Değişken isimleri ve formatları tutarlı olmalı, aynı türdeki veriler uyumlu formatta olmalıdır (örn. tarih formatı, kategorik değişkenlerin kodlanması).
+
+-   **Analiz İçin Uygun Olmalı:** Kullanılacak yöntem (Difference-in-Differences, Propensity Score Matching vb.) için gerekli değişkenleri içermelidir.
+
+### Veri Setinin Türü ve Yapısı
+
+Etki değerlendirmesi için kullanılan veri setleri genellikle iki ana yapıya sahiptir:
+
+#### Kesitsel Veri (Cross-Sectional Data)
+
+-   Tek bir zaman noktasındaki bireyleri veya firmaları içerir.
+-   Politikaların kısa vadeli etkilerini ölçmek için uygundur.
+-   Örnek: 2023 yılı için girişimcilik destek programına katılan firmalar ve katılmayan firmaların performansları.
+
+**Örnek Kesitsel Veri Seti**:
+
+| Firma ID | Müdahale | Gelir | Çalışan Sayısı | Sektör  |
+|----------|----------|-------|----------------|---------|
+| 201      | 1        | 75000 | 15             | Üretim  |
+| 202      | 0        | 60000 | 12             | Ticaret |
+
+#### Panel Veri (Panel Data)
+
+-   Aynı bireyleri veya firmaları farklı zaman dilimlerinde içerir.
+-   Difference-in-Differences (DiD) gibi yöntemler için gereklidir.
+-   Politikanın uzun vadeli etkisini incelemek için uygundur.
+
+**Örnek Panel Veri Seti** (Zaman içindeki değişimi gösterir):
+
+| Firma ID | Yıl  | Müdahale | Gelir | Çalışan Sayısı |
+|----------|------|----------|-------|----------------|
+| 201      | 2021 | 0        | 50000 | 10             |
+| 201      | 2022 | 1        | 60000 | 12             |
+| 202      | 2021 | 0        | 55000 | 11             |
+| 202      | 2022 | 0        | 58000 | 11             |
+
+Panel veri kullanıldığında müdahaleden önce ve sonra bireylerin/firma performanslarının nasıl değiştiği karşılaştırılabilir.
+
+### Etki Değerlendirme Yöntemleri için Veri Yapıları
+
+Etki değerlendirmesinde kullanılan yöntemlere göre veri setinin özellikleri değişebilir:
+
+-   **Propensity Score Matching (PSM)** → Müdahale ve karşılaştırma grubu arasında benzer özelliklere sahip gözlemler bulunmalı.
+-   **Difference-in-Differences (DiD)** → Zaman içinde gözlemlenen aynı bireyler veya firmalar olmalı.
+-   **Regression Discontinuity (RD)** → Kesikli bir değişken üzerinden belirlenen bir eşik değeri ile müdahale alan ve almayan grupların ayrımı yapılmalı.
+
+Her yöntem için veri setinin doğru formatta olması analiz sürecinin güvenilirliği açısından kritik öneme sahiptir.
+
+### Etki Değerlendirme için İdeal Veri Seti
+
+Etki değerlendirme veri seti, aşağıdaki özellikleri taşımalıdır:
+
+- **Zengin Değişken Yapısı**: Etkiyi ölçmek için bağımlı değişken, müdahale değişkeni ve kontrol değişkenleri içermelidir.\
+- **Doğru Veri Formatı**: Panel veri veya kesitsel veri analiz yöntemine uygun şekilde düzenlenmelidir.\
+- **Eksiksiz ve Temiz**: Eksik veriler doldurulmalı, aykırı değerler düzeltilmeli ve tutarsız girişler kaldırılmalıdır.\
+- **Zaman Boyutunu İçermeli**: Müdahale öncesi ve sonrası gözlemler mümkünse bulunmalıdır.
+
+Özetle, iyi yapılandırılmış, eksiksiz ve doğru bir veri seti, etki değerlendirme süreçlerinin güvenilirliğini artırır ve politika yapıcılara doğru yönlendirmeler sunar.
+
+## Etki Değerlendirmede Veri Seti ile İlgili Karşılaşılan Sorunlar ve Doğurduğu Sonuçlar
+
+Etki değerlendirme sürecinde kullanılan veri setleri, analizlerin doğruluğunu, geçerliliğini ve güvenilirliğini belirleyen en kritik bileşenlerden biridir. Verinin eksik, hatalı veya yanlış yapılandırılmış olması, değerlendirme sürecini yanıltıcı hale getirebilir ve politika yapıcıların yanlış sonuçlara ulaşmasına neden olabilir. Bu durum, etkisiz veya gereksiz politikaların sürdürülmesine ya da etkili bir müdahalenin gereğinden az desteklenmesine yol açabilir.
+
+Etki değerlendirme sürecinde karşılaşılan veri seti sorunları veri manipülasyonu, veri dönüşümü, veri şekillendirme, metin manipülasyonu ve fonksiyonlarla veri işleme aşamalarında yapılan hatalardan kaynaklanabilir. Bu aşamalarda dikkat edilmesi gereken en önemli unsurlar, veri setinin eksiksiz, tutarlı, doğru formatlanmış ve analiz için uygun yapıda olmasıdır. Aksi halde, yapılan modellemeler güvenilirliğini kaybedebilir ve yanlış politika sonuçlarına neden olabilir.
+
+Veri setleriyle ilgili yaşanan başlıca sorunlar; eksik veriler, aykırı değerler, örneklem seçim yanlılığı, zaman uyumsuzluğu, yanlış veri eşleşmeleri ve eksik tanımlanmış değişkenler olarak öne çıkmaktadır. Bu tür hatalar, veri analizlerinin yanıltıcı sonuçlar üretmesine, nedensellik ilişkilerinin hatalı yorumlanmasına ve yanlış politika önerilerine neden olabilir.
+
+Bu bölümde, etki değerlendirme sürecinde veri setleriyle ilgili yaygın olarak karşılaşılan sorunlar detaylı bir şekilde ele alınacak ve bu sorunların değerlendirme süreçleri üzerindeki etkileri tartışılacaktır. Aynı zamanda, veri kalitesini artırmaya yönelik bazı temel çözümler ve iyi uygulama yöntemleri de incelenecektir.
+
+### Veri Hazırlama, Dönüştürme ve Şekillendirme ile İlgili Genel Sorunlar
+
+Etki değerlendirme analizlerinde kullanılan veri setleri, ham veri olarak toplandıktan sonra çeşitli işlemlerden geçirilerek analiz edilebilir hale getirilmelidir. Ancak, yanlış veya eksik veri manipülasyonu, hatalı veri dönüşümleri, yanlış veri birleştirme işlemleri ve eksik veri temizliği gibi faktörler, sonuçların güvenilirliğini zayıflatabilir.
+
+-   Sütun Seçimi (`select()`) ve Satır Filtreleme (`filter()`) yanlış yapıldığında, analiz için gerekli olan değişkenler yanlışlıkla veri setinden çıkarılabilir veya örneklemde önemli bir kayma yaşanabilir.
+-   Satırların sıralanması (`arrange()`), zaman serisi analizlerinde doğru yapılmazsa, etki değerlendirme sonuçları hatalı olabilir.
+-   Yeni değişkenler oluşturulurken (`mutate()`) veya istatistiksel özetler hesaplanırken (`summarise()`) yanlış hesaplamalar, yanıltıcı bulgular üretebilir.
+-   Veri kaynaklarının birleştirilmesi (`merge()`) yanlış yapılırsa, aynı bireyler veya firmalar için tutarsız bilgiler içeren bir veri seti oluşabilir.
+-   Metinsel verilerin düzensizliği (yanlış kategorik değişkenler, eksik etiketler) analizleri bozabilir ve yanlış sınıflandırmalara yol açabilir.
+
+**Sonuçları:**
+
+-   Yanlış veri seçimi ve filtreleme, politika etkisinin yanlış hesaplanmasına neden olabilir.
+-   Eksik veya yanlış dönüştürülen veriler, analiz sonuçlarını çarpıtabilir.
+-   Yanlış eşleşmeler ve eksik gözlemler nedeniyle model hatalı tahminlerde bulunabilir.
+-   Etki değerlendirmesi hatalı yapıldığında, karar alıcılar yanlış yönlendirilebilir.
+
+### Eksik Verilerle Çalışma ve Olası Sorunlar
+
+Eksik veriler, etki değerlendirme süreçlerinde en yaygın karşılaşılan sorunlardan biridir. Veri setlerinde eksik değerlerin bulunması, analizlerin güvenilirliğini azaltabilir ve sonuçların yanlış yorumlanmasına yol açabilir.
+
+#### Eksik Verilerin Kaynakları ve Yaygın Nedenleri
+
+Eksik veriler, farklı nedenlerden dolayı ortaya çıkabilir:
+
+-   **Yanıt Eksiklikleri**: Anketlerde bazı sorulara verilen yanıtların eksik olması.
+-   **İdari Kayıtlardaki Boşluklar**: Kamu veritabanlarında bazı bireyler veya firmalar hakkında eksik bilgiler bulunması.
+-   **Örneklemden Kaynaklanan Eksiklikler**: Belirli bir grup bireyin veya firmanın değerlendirme dışında kalması.
+-   **Zaman Uyum Sorunları**: Verinin belirli dönemlerde eksik olması.
+
+#### Eksik Verilerin Etkileri
+
+Eksik veriler analiz sürecinde ciddi sorunlara yol açabilir:
+
+-   **Yanlılık Oluşabilir**: Eksik veriler sistematik bir biçimde belirli bir grupta toplanıyorsa (örneğin, düşük gelirli bireylerin anketleri tam doldurmaması), analizde yanlılık meydana gelebilir.
+-   **Örneklem Temsiliyetini Bozabilir**: Veri setindeki eksik değerler nedeniyle analiz edilen örneklem, evreni tam olarak temsil etmeyebilir.
+-   **Model Performansını Düşürebilir**: Eksik değerler yanlış tahminlere yol açabilir.
+
+**Sonuçları:**
+
+-   Eksik veri sorunları uygun yöntemlerle ele alınmazsa, analiz sonuçları ciddi şekilde yanlı hale gelebilir.
+-   Eksik verilerin yanlış doldurulması, model performansını düşürebilir.
+-   Verinin kalitesini artırmak için uygun eksik veri yöntemleri uygulanmalıdır.
+
+### Aykırı Değerler ile Çalışma ve Olası Sorunlar
+
+Aykırı değerler, veri setinde diğer gözlemlerden büyük ölçüde farklılık gösteren gözlemlerdir. Etki değerlendirme sürecinde, aykırı değerlerin varlığı analizleri yanıltıcı hale getirebilir.
+
+#### Aykırı Değerlerin Kaynakları
+
+-   **Ölçüm Hataları:** Veri girişlerinde hata yapılması sonucu ortaya çıkabilir.
+-   **Doğal Aykırılıklar**: Bazı bireyler veya firmalar gerçekten aşırı uç değerlere sahip olabilir.
+-   **Yanlış Veri Kodlaması**: Negatif maaş değerleri gibi mantıksız veriler bulunabilir.
+
+#### Aykırı Değerlerin Etkileri
+
+-   **Model Katsayılarını Çarpıtabilir**: Regresyon analizinde uç değerler tahminleri bozabilir.
+-   O**rtalama ve Standart Sapmayı Etkileyebilir**: Veri setinin genel istatistikleri yanıltıcı olabilir.
+-   **Yanlış Politikaların Önerilmesine Yol Açabili**r: Yanlış analiz sonuçları, etkisiz veya hatalı politikaların önerilmesine neden olabilir.
+
+**Sonuçları:**
+
+-   Aykırı değerler düzgün ele alınmazsa, analiz sonuçları yanıltıcı olabilir.
+-   Yanlış politika etkileri hesaplanabilir.
+-   Uygun istatistiksel yöntemlerle aykırı değerler kontrol edilmelidir.
+
+### Veri Setinin Yanıltıcı veya Eksik Tanımlanması
+
+Veri setinde bazı değişkenlerin eksik tanımlanması veya yanlış şekilde kategorize edilmesi, analiz süreçlerini olumsuz etkileyebilir.
+
+#### Yanlış Kategorik Değişken Tanımları
+
+-   Örneğin, "Bölgesel Kalkınma Programı"na dahil olan şehirlerin yanlış kategorize edilmesi, analiz sonuçlarını bozabilir.
+
+#### Zaman Uyum Sorunları
+
+-   Müdahale etkisini ölçmek için yeterli zaman geçmeden yapılan analizler, yanlış politika sonuçları çıkarılmasına neden olabilir.
+
+**Sonuçları:**
+
+-   Verinin yanlış tanımlanması, analizlerin yanlış yorumlanmasına yol açabilir.
+-   Politikalar hakkında hatalı çıkarımlar yapılabilir.
+-   Etki değerlendirme süreçlerinde veri yapısının doğru tanımlanması sağlanmalıdır.
+
+## Etki Değerlendirme İçin Veri Setlerinin Hazır Hale Getirilmesi
+
+Etki değerlendirme sürecinde kullanılan veri setlerinin doğru, eksiksiz ve analiz için uygun hale getirilmesi, elde edilecek sonuçların güvenilirliği açısından kritik bir öneme sahiptir. Veri setinde yer alan eksik gözlemler, hatalı girişler, aykırı değerler veya yanlış kodlanmış değişkenler giderilmezse, analiz sonuçları yanıltıcı olabilir ve politika yapıcıların yanlış yönlendirilmesine neden olabilir.
+
+Etki değerlendirme için uygun bir veri seti oluşturmak, sadece veriyi toplamakla sınırlı değildir. Verinin kalite kontrol süreçlerinden geçirilmesi, eksik veya hatalı verilerin düzeltilmesi ve analiz yöntemlerine uygun şekilde dönüştürülmesi gerekir. Eksik verilerin doldurulması, aykırı değerlerin analiz edilmesi, veri manipülasyonu ve standardizasyon gibi işlemler, veri setinin analize hazır hale getirilmesi için mutlaka uygulanmalıdır.
+
+Etki değerlendirme modelleri (Difference-in-Differences, Propensity Score Matching, Regression Discontinuity vb.) belirli veri yapıları gerektirdiğinden, veri setinin analiz yöntemlerine uygun hale getirilmesi de büyük önem taşır. Örneğin, panel veri kullanan Difference-in-Differences yöntemi için zaman boyutunun eksiksiz olması gerekirken, Propensity Score Matching yöntemi için müdahale ve kontrol gruplarının benzer özellikler taşıması sağlanmalıdır.
+
+Bu nedenle, veri setlerini analize uygun hale getirmek için aşağıdaki işlemler titizlikle uygulanmalıdır:
+
+-   Veri manipülasyonu ve dönüştürme işlemleri (sütun seçimi, veri standardizasyonu, zaman serisi uygunluğu vb.)
+-   Eksik verilerin belirlenmesi ve uygun şekilde doldurulması
+-   Aykırı değerlerin tespiti ve uygun yöntemlerle düzeltilmesi
+-   Farklı veri kaynaklarının tutarlı hale getirilmesi ve birleştirilmesi
+-   Doğru değişken tanımlamaları yapılarak veri setinin analiz yöntemine uygun hale getirilmesi
+
+Bu adımların her biri, analizin güvenilirliğini artırmak ve politika etkilerini doğru ölçmek için kritik rol oynamaktadır. Eksik veya hatalı veriler düzeltilmeden yapılan analizler, politika yapıcıların hatalı kararlar almasına neden olabilir. Bu bölümde, veri setinin etki değerlendirme sürecine uygun hale getirilmesi için atılması gereken temel adımlar detaylı bir şekilde ele alınacaktır.
+
+### Veri Manipülasyonu ve Dönüştürme İşlemleri
+
+Veri setlerinin analiz öncesinde uygun hale getirilmesi için sütun seçimi, satır filtreleme, sıralama ve veri dönüştürme işlemlerinin doğru yapılması gerekmektedir.
+
+-   **Gereksiz Sütunların Çıkarılması**: `select()` fonksiyonu ile analizde kullanılmayacak değişkenler veri setinden temizlenmelidir.
+-   **Hedef Grupların Seçilmesi**: `filter()` fonksiyonu ile yalnızca analiz için gerekli bireyler veya firmalar veri setinde bırakılmalıdır.
+-   **Zaman Serisi Uygunluğu**: `arrange()` fonksiyonu ile zaman içindeki değişimler doğru bir sıraya konulmalıdır.
+-   **Veri Standartlaştırma ve Yeniden Kodlama**: `mutate()` ve `rename()` fonksiyonları kullanılarak değişken isimleri ve kategorik değişkenler düzenlenmelidir.
+
+**Etki Değerlendirme İçin Önemi:**
+
+-   Müdahale ve kontrol gruplarının doğru tanımlanmasını sağlar.
+-   Modelin tutarlı bir veri seti üzerinden çalışmasına olanak tanır.
+-   Zamansal tutarsızlıkları ve yanlış filtreleme hatalarını önler.
+
+### Eksik Verilerle Başa Çıkma ve Tamamlama Süreci
+
+Eksik veriler, analizlerin güvenilirliğini düşüren en büyük sorunlardan biridir. Eksik veri oranı yüksekse, analiz yanlı hale gelebilir ve yanlış politika kararları alınabilir.
+
+-   **Eksik Veri Analizi:** Eksik veri yüzdesi belirlenmeli ve sistematik bir desen olup olmadığı incelenmelidir. `naniar`, `VIM` gibi paketler ile eksik veri görselleştirilebilir.
+
+-   **Eksik Verileri Doldurma Yöntemleri:**
+
+    -   Ortalama, Medyan veya Mod ile Doldurma (Basit ama her zaman güvenilir değil)
+    -   Regresyon Tabanlı İmputasyon
+    -   Çoklu İmputasyon (MICE Paketi ile)
+    -   K En Yakın Komşu (KNN) Yöntemi
+
+-   **Eksik Verilerin Yönetimi:** Eğer eksik veriler belirli bir gruba özgü ise (örneğin düşük gelirli bireylerde daha fazla eksik veri olması gibi), analiz sırasında bu eksiklik dikkate alınmalıdır.
+
+**Etki Değerlendirme İçin Önemi:**
+
+-   Eksik verilerin uygun şekilde doldurulması, analizlerin güvenilirliğini artırır.
+-   Örneklemde sistematik veri kaybı olup olmadığı belirlenebilir.
+-   Eksik verilerin yanlış doldurulması önlenerek modelin hatalı tahminler yapması engellenir.
+
+### Aykırı Değerleri Tespit Etme ve Düzenleme
+
+Aykırı değerler, analiz sonuçlarını çarpıtabilir ve yanlış politika önerilerine yol açabilir. Bu nedenle aykırı değerlerin tespit edilmesi ve uygun şekilde ele alınması gerekmektedir.
+
+-   **Aykırı Değerleri Belirleme:**
+
+    -   **İstatistiksel yöntemlerle tespit edilmesi**: Z-skoru, IQR yöntemi, Boxplot kullanımı.
+    -   **Görselleştirme ile inceleme**: `boxplot()`, `ggplot2` kullanımı.
+
+-   **Aykırı Değerlerle Baş Etme Yöntemleri:**
+
+    -   **Veri Setinden Çıkarma**: Aşırı uç değerler tamamen kaldırılabilir. Ancak dikkatli olunmalıdır, çünkü bazı aykırı değerler gerçekte politika etkisini yansıtan değerler olabilir.
+
+    -   **Winsorization**: Aykırı değerlerin belirli bir sınıra çekilmesi.
+
+    -   **Robust Modeller Kullanma**: Aykırı değerlere duyarlı olmayan analiz yöntemleri tercih edilmelidir.
+
+**Etki Değerlendirme İçin Önemi:**
+
+-   Aykırı değerler kontrol edilmezse, müdahale etkisi yanlış hesaplanabilir.
+-   Bazı grupların aşırı etkili görünüp gerçekte farklı sonuçlar doğurması önlenir.
+-   Politikaların uzun vadeli etkileri daha doğru bir şekilde hesaplanır.
+
+## Sonuç
+
+Etki değerlendirme sürecinin sağlıklı bir şekilde yürütülebilmesi, kullanılan verinin kalitesiyle doğrudan ilişkilidir. Eksik, hatalı veya düzensiz bir veri seti ile yapılan analizler, yanlış sonuçlara yol açarak politika yapıcıları yanıltabilir ve kaynakların etkisiz kullanılmasına neden olabilir. Bu nedenle, veri setlerinin manipülasyon, dönüşüm, temizleme ve bütünleştirme işlemlerinden geçirilerek analiz için uygun hale getirilmesi gerekmektedir.
+
+Eksik verilerin uygun yöntemlerle tamamlanması, aykırı değerlerin kontrol edilmesi, zaman uyumsuzluklarının giderilmesi ve veri setinin standardize edilmesi, değerlendirme sürecinin doğruluğunu artıracaktır. Ayrıca, veri türüne ve kullanılan yönteme bağlı olarak veri setinin kesitsel veya panel veri formatında düzenlenmesi, nedensellik ilişkilerinin daha sağlıklı kurulmasına olanak tanıyacaktır.
+
+Etki değerlendirme süreçlerinde doğru veriyle çalışmak, müdahale ve kontrol gruplarının karşılaştırılmasını kolaylaştırır, nedensel ilişkileri daha iyi anlamamızı sağlar ve daha güvenilir politika önerileri geliştirilmesine katkıda bulunur. Ancak, veri setleri hazırlanırken yukarıda ele alınan hataların önlenmesi büyük önem taşımaktadır.
+
+Bu çalışma, yukarıda sayılan konuların önemli bir kısmında yardımcı olacak niteliktedir. Veri setlerinin etki değerlendirme sürecine uygun hale getirilmesine yönelik adımlar, eksik veri yönetimi, aykırı değer analizi, veri bütünleştirme ve standardizasyon gibi kritik konulara değinilerek kapsamlı bir yol haritası sunulmuştur. Bu sayede, politika yapıcılar ve araştırmacılar, daha sağlıklı analizler yaparak karar alma süreçlerinde güvenilir bilgiye dayalı değerlendirmeler gerçekleştirebileceklerdir.
+
+\newpage
